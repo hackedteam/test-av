@@ -37,7 +37,7 @@ class MachineManager(object):
         """
         self.module_name = module_name
         mmanager_opts = self.options.get(module_name)
-
+        
         for machine_id in mmanager_opts["machines"].strip().split(","):
             machine_opts = self.options.get(machine_id)
             machine = Dictionary()
@@ -45,7 +45,12 @@ class MachineManager(object):
             machine.label = machine_opts["label"]
             machine.platform = machine_opts["platform"]
             machine.ip = machine_opts["ip"]
+            #machine.machine_path = machine_opts["machine_path"]
             machine.locked = False
+            # vmware check
+            #if machine_opts["machine_path"]:
+                #machine.machine_path = machine_opts["machine_path"]
+            
             self.machines.append(machine)
 
         # Run initialization checks.
@@ -59,9 +64,10 @@ class MachineManager(object):
         # Checks if machines configured are really available.
         try:
             configured_vm = self._list()
-            for machine in self.machines:
-                if machine.label not in configured_vm:
-                    raise CuckooMachineError("Configured machine %s was not detected or it's not in proper state" % machine.label)
+            
+            #for machine in self.machines:
+                #if machine.label not in configured_vm:
+                    #raise CuckooMachineError("Configured machine %s was not detected or it's not in proper state" % machine.label)
         except NotImplementedError:
             pass
 
@@ -129,7 +135,7 @@ class MachineManager(object):
         """
         raise NotImplementedError
 
-    def _list(self):
+    def _list(self, vmx=None):
         """Lists virtual machines configured.
         @raise NotImplementedError: this method is abstract.
         """
@@ -154,7 +160,7 @@ class Processing(object):
         self.logs_path = os.path.join(self.analysis_path, "logs")
         self.shots_path = os.path.join(self.analysis_path, "shots")
         self.pcap_path = os.path.join(self.analysis_path, "dump.pcap")
-
+        
     def run(self):
         """Start processing.
         @raise NotImplementedError: this method is abstract.

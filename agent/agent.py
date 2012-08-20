@@ -78,9 +78,10 @@ class Agent:
         @param iszip: is a zip file.
         @return: operation status.
         """
+        print "inside agent\ndata %s\n name %s" % (data,name)
         data = data.data
-        root = self._get_root(container="")
-
+        #root = self._get_root(container="")
+        root = "C:\\Windows\\temp\\"
         if not root:
             return False
 
@@ -230,7 +231,6 @@ if __name__ == "__main__":
             BIND_IP = socket.gethostbyname(socket.gethostname())
 
         print("[+] Starting agent on %s:%s ..." % (BIND_IP, BIND_PORT))
-
         server = SimpleXMLRPCServer((BIND_IP, BIND_PORT), allow_none=True)
         server.register_instance(Agent())
         server.serve_forever()

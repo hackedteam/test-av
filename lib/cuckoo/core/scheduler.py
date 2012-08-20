@@ -8,6 +8,7 @@ import time
 import shutil
 import logging
 from threading import Thread, Lock
+from time import sleep
 
 from lib.cuckoo.common.exceptions import CuckooAnalysisError, CuckooMachineError, CuckooGuestError
 from lib.cuckoo.common.abstracts import Dictionary, MachineManager
@@ -152,9 +153,12 @@ class AnalysisManager(Thread):
             # Save results
             guest.save_results(self.analysis.results_folder)
         except (CuckooMachineError, CuckooGuestError) as e:
+            print "fuck off"
             raise CuckooAnalysisError(e.message)
         finally:
             # Stop machine
+            print "Sleeping 10 secs"
+            sleep(10)
             mmanager.stop(vm.label)
             # Release the machine from lock
             mmanager.release(vm.label)
