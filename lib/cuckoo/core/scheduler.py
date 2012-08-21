@@ -16,6 +16,7 @@ from lib.cuckoo.common.utils import File, create_folders
 from lib.cuckoo.common.config import Config
 from lib.cuckoo.core.database import Database
 from lib.cuckoo.core.guest import GuestManager
+from lib.cuckoo.core.screener import Screener
 from lib.cuckoo.core.sniffer import Sniffer
 from lib.cuckoo.core.processor import Processor
 from lib.cuckoo.core.reporter import Reporter
@@ -134,7 +135,21 @@ class AnalysisManager(Thread):
             sniffer.start(interface=self.cfg.cuckoo.interface, host=vm.ip, file_path=os.path.join(self.analysis.results_folder, "dump.pcap"))
         else:
             sniffer = False
-
+    
+                
+        # Initialize VMWare ScreenShot
+        MachineManager()
+        module = MachineManager.__subclasses__()[0]
+        mman = module()
+        mman_conf = os.path.join(CUCKOO_ROOT, "conf", "%s.conf" % self.cfg.cuckoo.machine_manager)
+        if not os.path.exists(mman_conf):
+            raise CuckooMachineError("The configuration file for machine manager \"%s\" does not exist at path: %s"
+                                     % (self.cfg.cuckoo.machine_manager, mman_conf))
+        mman.set_options(Config(mman_conf))
+        mman.initialize(self.cfg.cuckoo.machine_manager)
+        screener = Screener(mman.options.vmware.path, mman.options.vmware.machine_path, "olli", "p0rnstar", self.analysis.results_folder)
+        #screener = Screener(mman.options.vmware.path, vm_path=vmman.vm_path, username="olli",password="p0rnstar",shot_path=self.analysis.results_folder)
+        
         try:
             # Start machine
             mmanager.start(vm.label)
@@ -142,18 +157,22 @@ class AnalysisManager(Thread):
             guest = GuestManager(vm.ip, vm.platform)
             # Launch analysis
             guest.start_analysis(options)
+            print "analysis started"
+            # Start Screenshots
+            screener.start()
             # Wait for analysis to complete
             success = guest.wait_for_completion()
             # Stop sniffer
             if sniffer:
                 sniffer.stop()
-    
+            # Stop Screenshots
+            if screener:
+                screener.stop()
             if not success:
                 raise CuckooAnalysisError("Analysis failed, review previous errors")
             # Save results
             guest.save_results(self.analysis.results_folder)
         except (CuckooMachineError, CuckooGuestError) as e:
-            print "fuck off"
             raise CuckooAnalysisError(e.message)
         finally:
             # Stop machine
@@ -162,7 +181,7 @@ class AnalysisManager(Thread):
             mmanager.stop(vm.label)
             # Release the machine from lock
             mmanager.release(vm.label)
-
+        
         # Launch reports generation
         Reporter(self.analysis.results_folder).run(Processor(self.analysis.results_folder).run())
 

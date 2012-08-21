@@ -40,10 +40,10 @@ class Screenshots(Thread):
         while self.do_run:
             img_current = Screenshot().take()
 
-            if img_last:
-                if Screenshot().equal(img_last, img_current):
-                    time.sleep(SHOT_DELAY)
-                    continue
+            #if img_last:
+            #    if Screenshot().equal(img_last, img_current):
+            #        time.sleep(SHOT_DELAY)
+            #        continue
 
             img_counter += 1
             save_at = os.path.join(self.save_path, "%s.jpg" % str(img_counter).rjust(4, '0'))

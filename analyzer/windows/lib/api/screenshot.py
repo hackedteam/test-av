@@ -38,3 +38,59 @@ class Screenshot:
             return None
 
         return ImageGrab.grab()
+
+
+
+import subprocess, os
+import hashlib
+from time import sleep
+from threading import Thread
+
+
+class Screener(Thread):
+
+    # path to save screens
+    # path vmrun
+    def __init__(self, vmrun):
+        self.vmrun = vmrun
+    
+    def start(self, vm_path, username="", password="", shot_path=""):
+        # creating a file .pid
+        self.lock_file = '/tmp/lock.pid'
+        if not os.path.exists(self.lock_file):
+            lock = open(self.lock_file, 'w')
+            lock.close()
+        
+        first = "%s/file1.png" % shot_path  
+        self.proc = subprocess.Popen("%s -gu %s -gp %s captureScreen %s %s" % (self.vmrun, username, password, vm_path, first))
+        first_hash = hashlib.md5(open(first, 'r').read()).digest()
+        
+        while True:
+            
+            if not os.path.exists(self.lock_file):
+                print "stopping time"
+                break
+            
+            # Take screenshot
+            # TODO: 
+            # username, password of guest account
+
+            cur = "%s/file12.png" % shot_path  
+            self.proc = subprocess.Popen("%s -gu %s -gp %s captureScreen %s %s" % (self.vmrun, username, password, vm_path, cur))
+            # 2. md5 of file
+            cur_hash = hashlib.md5(open(cur, 'r').read()).digest()
+
+            # 3. if md5 current == previous delete file
+            if cur_hash == first_hash:
+                print "removing %s" % cur
+                os.remove(cur)
+            # 4. sleeping time
+            sleep(1)
+
+
+    def stop():
+        if os.path.exists(self.lock_file):
+            os.remove(self.lock_file)
+
+
+

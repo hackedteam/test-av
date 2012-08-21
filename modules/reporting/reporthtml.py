@@ -33,7 +33,7 @@ class ReportHTML(Report):
             shots = []
             counter = 1
             for shot_name in os.listdir(shots_path):
-                if not shot_name.endswith(".jpg"):
+                if not shot_name.endswith(".png"):
                     continue
 
                 shot_path = os.path.join(shots_path, shot_name)

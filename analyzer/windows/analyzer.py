@@ -306,7 +306,10 @@ class Analyzer:
             pack.finish()
         except NotImplementedError:
             pass
-
+    
+        from time import sleep
+        sleep(10)
+        
         shots.stop()
         self.complete()
 

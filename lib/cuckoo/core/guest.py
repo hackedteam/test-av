@@ -83,19 +83,15 @@ class GuestManager:
             return False
 
         log.info("Starting analysis on guest (ip=%s)" % self.ip)
-        print "inside guest"
         socket.setdefaulttimeout(180)
 
         try:
-            print "Y0000000000 %s " % options
-            
             self.wait(CUCKOO_GUEST_INIT)
             self.upload_analyzer()
             self.server.add_config(options)
     
             file_data = open(options["file_path"], "rb").read()
             data = xmlrpclib.Binary(file_data)
-            print "DataLeakz %s " % data
             self.server.add_malware(data, options["file_name"])
             self.server.execute()
         except socket.timeout:
