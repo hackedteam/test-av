@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 class VMWare(MachineManager):
     """Virtualization layer for VMWare."""
-    
+
     def _initialize_check(self):
         """Runs all checks when a machine manager is initialized.
             @raise CuckooMachineError: if VBoxManage is not found.
@@ -30,13 +30,23 @@ class VMWare(MachineManager):
     
     def start(self, label):
         """Start a virtual machine.
-            @param label: virtual machine name.
+            @param label: virtual machine snapshot.
             @raise CuckooMachineError: if unable to start.
             """
         try:
+            if subprocess.call([self.options.vmware.path, 
+                                    "revertToSnapshot", 
+                                    label, 
+                                    "current"],
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE):
+                raise CuckooMachineError("vmrun exited with error restoring the machine's snapshot")
+        except OSError as e:
+            raise CuckooMachineError("vmrun failed restoring the machine: %s" % e.message)
+        try:
             subprocess.Popen([self.options.vmware.path,
                               "start",
-                              self.options.vmware.machine_path],
+                              label],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
             print " started"
@@ -50,7 +60,9 @@ class VMWare(MachineManager):
             @raise CuckooMachineError: if unable to stop.
             """
         try:
-            if subprocess.call([self.options.vmware.path, "stop", self.options.vmware.machine_path],
+            if subprocess.call([self.options.vmware.path, 
+                                "stop", 
+                                label],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE):
                 raise CuckooMachineError("vmrun exited with error powering off the machine")
@@ -62,20 +74,20 @@ class VMWare(MachineManager):
         try:
             if subprocess.call([self.options.vmware.path, 
                                 "revertToSnapshot", 
-                                self.options.vmware.machine_path, 
-                                label],
+                                label,
+                                "current"],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE):
                 raise CuckooMachineError("vmrun exited with error restoring the machine's snapshot")
         except OSError as e:
             raise CuckooMachineError("vmrun failed restoring the machine: %s" % e.message)
-                
+    '''            
     def _list(self):
         """Lists virtual machines installed.
             @return: virtual machine names list.
             """
         try:
-            proc = subprocess.Popen([self.options.vmware.path, "listSnapshots", self.options.vmware.machine_path],
+            proc = subprocess.Popen([self.options.vmware.path, "listSnapshots", label],
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
             print proc
@@ -95,3 +107,4 @@ class VMWare(MachineManager):
                 continue
         
         return machines
+    '''

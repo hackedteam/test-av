@@ -117,7 +117,7 @@ class AnalysisManager(Thread):
         self.init_storage()
         self.store_file()
         options = self.build_options()
-
+        
         while True:
             machine_lock.acquire()
             vm = mmanager.acquire(machine_id=self.task.machine, platform=self.task.platform)
@@ -135,8 +135,7 @@ class AnalysisManager(Thread):
             sniffer.start(interface=self.cfg.cuckoo.interface, host=vm.ip, file_path=os.path.join(self.analysis.results_folder, "dump.pcap"))
         else:
             sniffer = False
-    
-                
+
         # Initialize VMWare ScreenShot
         MachineManager()
         module = MachineManager.__subclasses__()[0]
@@ -147,8 +146,8 @@ class AnalysisManager(Thread):
                                      % (self.cfg.cuckoo.machine_manager, mman_conf))
         mman.set_options(Config(mman_conf))
         mman.initialize(self.cfg.cuckoo.machine_manager)
-        screener = Screener(mman.options.vmware.path, mman.options.vmware.machine_path, "olli", "p0rnstar", self.analysis.results_folder)
-        #screener = Screener(mman.options.vmware.path, vm_path=vmman.vm_path, username="olli",password="p0rnstar",shot_path=self.analysis.results_folder)
+        #vmc = self.options.get(self.task.machine)
+        screener = Screener(mman.options.vmware.path, vm.label, "olli", "p0rnstar", self.analysis.results_folder)
         
         try:
             # Start machine
@@ -157,7 +156,6 @@ class AnalysisManager(Thread):
             guest = GuestManager(vm.ip, vm.platform)
             # Launch analysis
             guest.start_analysis(options)
-            print "analysis started"
             # Start Screenshots
             screener.start()
             # Wait for analysis to complete
@@ -176,8 +174,6 @@ class AnalysisManager(Thread):
             raise CuckooAnalysisError(e.message)
         finally:
             # Stop machine
-            print "Sleeping 10 secs"
-            sleep(10)
             mmanager.stop(vm.label)
             # Release the machine from lock
             mmanager.release(vm.label)

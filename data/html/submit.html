@@ -39,6 +39,16 @@
                     </div>
                 </div>
 
+                <div class="control-group ${'error' if context.get('error_options','') else ''}">
+                    <label class="control-label" for="input05">Machines</label>
+                    <div class="controls">
+                        <input type="text" name="options" class="input-xlarge" id="input05" value="${context.get('machine','')}">
+                        % if error_machine != UNDEFINED:
+                            <span class="help-inline">${error_options}</span>
+                        % endif
+                    </div>
+                </div>
+
                 <div class="control-group ${'error' if context.get('error_timeout','') else ''}">
                     <label class="control-label" for="input04">Timeout</label>
                     <div class="controls">

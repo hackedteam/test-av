@@ -44,6 +44,7 @@ class ReportHTML(Report):
                 shot = {}
                 shot["id"] = os.path.splitext(File(shot_path).get_name())[0]
                 shot["data"] = base64.b64encode(open(shot_path, "rb").read())
+                #shot["cum"] = "Seppia is gay"
                 shots.append(shot)
 
                 counter += 1

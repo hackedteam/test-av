@@ -99,6 +99,7 @@ def submit():
     # Optional, can be empty
     package  = request.forms.get("package", "")
     options  = request.forms.get("options", "")
+    machine  = request.forms.get("machine", "")
     priority = request.forms.get("priority", 1)
     timeout  = request.forms.get("timeout", "")
     data = request.files.file
