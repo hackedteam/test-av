@@ -47,6 +47,27 @@ class Database:
         cursor = conn.cursor()
 
         try:
+            """We need 3 tables: Analysis, tasks and another one 
+            needed for executables"""
+            cursor.execute("CREATE TABLE analysis (\n"                        \
+                           "    id INTEGER PRIMARY KEY,\n"                    \
+                           "    desc TEXT DEFAULT NULL,\n"                    \
+                           "    exe_id INTEGER NOT NULL,\n"           \
+                           "    created_on DATE DEFAULT CURRENT_TIMESTAMP,\n" \
+                           "    completed_on DATE DEFAULT NULL,\n"            \
+                           "    lock INTEGER DEFAULT 0,\n"                    \
+                           # Status possible values:
+                           #   0 = not completed
+                           #   1 = error occurred
+                           #   2 = completed successfully.
+                           "    status INTEGER DEFAULT 0\n"                 \
+                           ");")
+                           
+            cursor.execute("CREATE TABLE exe ("                             \
+                            "   id INTEGER PRIMARY KEY,\n "                 \
+                            "   file_path TEXT NOT NULL\n"                 \
+                            ");")
+            
             cursor.execute("CREATE TABLE tasks (\n"                         \
                            "    id INTEGER PRIMARY KEY,\n"                  \
                            "    md5 TEXT DEFAULT NULL,\n"                   \
@@ -67,6 +88,7 @@ class Database:
                            #   2 = completed successfully.
                            "    status INTEGER DEFAULT 0\n"                 \
                            ");")
+
         except sqlite3.OperationalError as e:
             raise CuckooDatabaseError("Unable to create database: %s" % e)
 
@@ -106,6 +128,39 @@ class Database:
         except sqlite3.OperationalError as e:
             return None
 
+    def add_analysis(self, desc, exe_id):
+        """ Add an analysis on database
+        @param desc: description
+        @param exe_id: id of executable to test
+        @return: cursor or None
+        """             
+        if not exe_id:
+            return None
+        
+        try:
+            self.cursor.execute("INSERT INTO analysis "\
+                                "(desc, exe_id) VALUES (?, ?);",
+                                (desc, exe_id))
+            self.conn.commit()
+            return self.cursor.lastrowid
+        except sqlite3.OperationalError as e:
+            return None
+
+    def add_exe(self, file_path):
+        """ Add an exe to db
+        @param file_path: path to file
+        @return: cursor or None
+        """
+        if not file_path or not os.path.exists(file_path):
+            return None
+        
+        try:
+            self.cursor.execute("INSERT INTO exe (file_path) VALUES (?);", file_path)
+            self.conn.commit()
+            return self.cursor.lastrowid
+        except sqlit3.OperationalError as e:
+            return None
+            
     def fetch(self):
         """Fetch a task.
         @return: task dict or None.
