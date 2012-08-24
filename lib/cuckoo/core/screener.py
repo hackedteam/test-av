@@ -1,9 +1,13 @@
-import subprocess, os
+import subprocess
+import os
+import shutil
 import hashlib, md5
 import string, random
 from time import sleep
 from threading import Thread
 
+from lib.cuckoo.common.exceptions import CuckooAnalysisError, CuckooMachineError, CuckooGuestError
+from lib.cuckoo.common.utils import File
 
 class Screener(Thread):
     
@@ -20,6 +24,7 @@ class Screener(Thread):
         
     #def do_start(self, vm_path, username, password, shot_path):
     def run(self):
+        idx = 1
         # creating a file .pid
         self.lock_file = '/tmp/lock.pid'
         if not os.path.exists(self.lock_file):
@@ -31,29 +36,32 @@ class Screener(Thread):
         if not os.path.exists(self.shot_path + "/shots"):
             os.mkdir(self.shot_path + "/shots")
         #first = u"%s/shots/%s.png" % (self.shot_path, "".random.sample(string.letters, 5))
-        first = self.shot_path + "/shots/" + "".join(random.sample(string.letters, 5)) + ".png"
+        first = self.shot_path + "/shots/0000.png"
         self.proc = subprocess.Popen([self.vmrun,
                                     "-gu", "%s" % self.username,
                                     "-gp", "%s" % self.password,
                                     "captureScreen",
                                     self.vm_path,
                                     first])
-        #first_hash = hashlib.md5(open(first.replace(" ", "\ "), 'r').read()).digest()
-        #if os.path.exists(first):
-        #    f = open(first, 'rb')
-        #    first_hash = hashlib.md5(f.read()).digest()
-        
-        while True:
-            
+        #try:
+        #    first_hash = File(first).get_md5()
+        #except  (IOError, shutil.Error) as e:
+        #    raise CuckooAnalysisError("Unable get md5 for file \"%s\", analysis aborted" % first)
+        #    pass
+
+        while True:  
+            """ Screenshotting time"""
             if not os.path.exists(self.lock_file):
                 print "stopping time"
                 break
-            
             # Take screenshot
             # TODO: 
             # username, password of guest account
-            cur = self.shot_path + "/shots/" + "".join(random.sample(string.letters, 5)) + ".png"
-            #print "saving to %s" % cur
+            if idx < 10:
+                cur = self.shot_path + "/shots/000" + str(idx) + ".png"
+            elif idx > 9:
+                cur = self.shot_path + "/shots/00" + str(idx) + ".png"    
+
             self.proc = subprocess.Popen([self.vmrun,
                                         "-gu", "%s" % self.username,
                                         "-gp", "%s" % self.password,
@@ -61,30 +69,23 @@ class Screener(Thread):
                                         self.vm_path,
                                         cur])
             # 2. md5 of file
-            #cur_hash = hashlib.md5(open(cur.replace(" ", "\ "), 'r').read()).digest()
-            if os.path.exists(cur):
-                f = open(cur, 'rb')
-                cur_hash = hashlib.md5(f.read()).digest()
-                #cur_hash = hashlib.md5(open(cur, 'rb').read()).digest()
-            
-            '''    
+            #try:
+            #    cur_hash = File(cur).get_md5()
+            #except  (IOError, shutil.Error) as e:
+            #    raise CuckooAnalysisError("Unable get md5 for file \"%s\", analysis aborted" % cur)
+            #    pass
+                            
             # 3. if md5 current == previous delete file
-            if cur_hash == first_hash:
-                print "removing %s" % cur
-                os.remove(cur)
-            '''
+            #if cur_hash == first_hash:
+            #    print "removing current snapshot"
+            #    os.remove(cur)
+            
             # 4. sleeping time
+            idx+=1
             sleep(1)
-        print "cheerz....\n\n"
     
     
     def stop(self):
         if os.path.exists(self.lock_file):
             os.remove(self.lock_file)
-            
-    '''
-    def run(self):
-        print "calling do_start"
-        self.do_start(self.vm_path, self.username, self.password, self.shot_path)
-        print "end of thread"
-    '''
+
