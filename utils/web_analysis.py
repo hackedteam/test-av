@@ -29,7 +29,8 @@ lookup = TemplateLookup(directories=[os.path.join(CUCKOO_ROOT, "data", "html")],
                         encoding_errors="replace",
                         strict_undefined=False)
 
-def store_and_submit_fileobj(fobj, filename, package="", options="", timeout=0, priority=1, machine="", platform=""):
+def store_and_submit_fileobj(fobj, filename, desc, package="", 
+                            options="", timeout=0, priority=1, machines="", platform=""):
     # Do everything in tmppath/TMPSUBDIR
     tmppath = tempfile.gettempdir()
     targetpath = os.path.join(tmppath, TMPSUBDIR)
@@ -51,16 +52,24 @@ def store_and_submit_fileobj(fobj, filename, package="", options="", timeout=0, 
 
     # Submit task to cuckoo db
     db = Database()
-    task_id = db.add(file_path=tmpf.name,
-                     md5=md5h.hexdigest(),
-                     package=package,
-                     timeout=timeout,
-                     options=options,
-                     priority=priority,
-                     machine=machine,
-                     platform=platform)
+    # Create executable record if needed
+    exe_id = db.add_exe(file_path=tmpf.name,
+                        md5=md5h.hexdigest())
+    # Create analysis record
+    anal_id = db.add_analysis(desc, exe_id)
+    
+    for machine in machines.split(","):
+        task_id = db.add(file_path=tmpf.name,
+                         anal_id=anal_id,
+                         md5=md5h.hexdigest(),
+                         package=package,
+                         timeout=timeout,
+                         options=options,
+                         priority=priority,
+                         machine=machine,
+                         platform=platform)
 
-    return task_id
+    return anal_id
 
 @route("/")
 def index():
@@ -86,6 +95,48 @@ def browse():
 
     return template.render(os=os, rows=rows, **context)
 
+#
+@route("/analysis")
+def analysis():
+    db = Database()
+    context = {}
+
+    try:
+        db.cursor.execute("SELECT * FROM analysis " \
+                          "ORDER BY status, created_on DESC;")
+    except sqlite3.OperationalError as e:
+        context["error"] = "Could not load tasks from database."
+        return template.render(**context)
+
+    rows = db.cursor.fetchall()
+    for row in rows:
+        db.cursor.execute("SELECT * FROM exe " \
+                          "WHERE id = ?;", (row.exe_id,))
+        exe = db.cursor.fetchone()
+        row.update({"file_path":exe.file_path})
+        
+    template = lookup.get_template("analysis.html")
+    context["cuckoo_root"] = CUCKOO_ROOT
+    return template.render(os=os, rows=rows, **context)
+
+@route("/analysis/view/<anal_id>")
+def analysis_view(anal_id):    
+    db = Database()
+    context = {}
+    
+    try:
+        db.cursor.execute("SELECT * FROM tasks " \
+                          "WHERE anal_id = ?;", (anal_id,))
+    except sqlite3.OperationalError as e:
+        context["error"] = "Could not load analysis from database"
+        return template.render(**context)
+    
+    rows = db.cursor.fetchall()
+    template = lookup.get_template("browse.html")
+    context["cuckoo_root"] = CUCKOO_ROOT
+    return template.render(os=os, rows=rows, **context)
+
+
 @route("/static/<filename:path>")
 def server_static(filename):
     return static_file(filename, root=os.path.join(CUCKOO_ROOT, "data", "html"))
@@ -97,9 +148,10 @@ def submit():
     errors = False
 
     # Optional, can be empty
+    desc     = request.forms.get("desc", "")
     package  = request.forms.get("package", "")
     options  = request.forms.get("options", "")
-    machine  = request.forms.get("machine", "")
+    machines = request.forms.get("machines", "")
     priority = request.forms.get("priority", 1)
     timeout  = request.forms.get("timeout", "")
     data = request.files.file
@@ -124,11 +176,12 @@ def submit():
         return template.render(timeout=timeout, priority=priority, options=options, package=package, **context)
     
     # Finally real store and submit
-    taskid = store_and_submit_fileobj(data.file,data.filename, timeout=timeout, priority=priority, options=options, package=package)
-
+    analid = store_and_submit_fileobj(data.file, data.filename, desc=desc, 
+                                    timeout=timeout, priority=priority, options=options, 
+                                    machines=machines, package=package)
     # Show result
     template = lookup.get_template("success.html")
-    return template.render(taskid=taskid, submitfile=data.filename)
+    return template.render(analid=analid, submitfile=data.filename)
 
 # Find an HTML report and render it
 @route("/view/<task_id>")

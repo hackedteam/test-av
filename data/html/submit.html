@@ -19,6 +19,16 @@
                     </div>
                 </div>
 
+                <div class="control-group ${'error' if context.get('error_desc','') else ''}">
+                    <label class="control-label" for="input06">Analysis description</label>
+                    <div class="controls">
+                        <input type="text" name="desc" class="input-xlarge" id="input06" value="${context.get('desc','')}">
+                        % if error_desc != UNDEFINED:
+                            <span class="help-inline">${error_desc}</span>
+                        % endif
+                    </div>
+                </div>
+
                 <div class="control-group ${'error' if context.get('error_package','') else ''}">
                     <label class="control-label" for="input02">Package to use</label>
                     <div class="controls">
@@ -39,12 +49,12 @@
                     </div>
                 </div>
 
-                <div class="control-group ${'error' if context.get('error_options','') else ''}">
+                <div class="control-group ${'error' if context.get('error_machines','') else ''}">
                     <label class="control-label" for="input05">Machines</label>
                     <div class="controls">
-                        <input type="text" name="options" class="input-xlarge" id="input05" value="${context.get('machine','')}">
+                        <input type="text" name="machines" class="input-xlarge" id="input05" value="${context.get('machines','')}">
                         % if error_machine != UNDEFINED:
-                            <span class="help-inline">${error_options}</span>
+                            <span class="help-inline">${error_machines}</span>
                         % endif
                     </div>
                 </div>
