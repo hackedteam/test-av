@@ -48,7 +48,8 @@ class Database:
 
         try:
             """We need 3 tables: Analysis, tasks and another one 
-            needed for executables"""
+            needed for executables
+            """
             cursor.execute("CREATE TABLE analysis (\n"                        \
                            "    id INTEGER PRIMARY KEY,\n"                    \
                            "    desc TEXT DEFAULT NULL,\n"                    \
@@ -65,11 +66,13 @@ class Database:
                            
             cursor.execute("CREATE TABLE exe ("                             \
                             "   id INTEGER PRIMARY KEY,\n "                 \
-                            "   file_path TEXT NOT NULL\n"                 \
+                            "   file_path TEXT NOT NULL,\n"                 \
+                            "    md5 TEXT DEFAULT NULL\n"                   \
                             ");")
             
             cursor.execute("CREATE TABLE tasks (\n"                         \
                            "    id INTEGER PRIMARY KEY,\n"                  \
+                           "    anal_id INTEGER NOT NULL,\n"                \
                            "    md5 TEXT DEFAULT NULL,\n"                   \
                            "    file_path TEXT NOT NULL,\n"                 \
                            "    timeout INTEGER DEFAULT NULL,\n"            \
@@ -96,6 +99,7 @@ class Database:
 
     def add(self,
             file_path,
+            anal_id,
             md5="",
             timeout=0,
             package="",
@@ -106,6 +110,7 @@ class Database:
             platform=""):
         """Add a task to database.
         @param file_path: sample path.
+        @param anal_id: analysis id referenced to table.
         @param md5: sample MD5.
         @param timeout: selected timeout.
         @param options: analysis options.
@@ -120,9 +125,9 @@ class Database:
 
         try:
             self.cursor.execute("INSERT INTO tasks " \
-                                "(file_path, md5, timeout, package, options, priority, custom, machine, platform) " \
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                                (file_path, md5, timeout, package, options, priority, custom, machine, platform))
+                                "(file_path, anal_id, md5, timeout, package, options, priority, custom, machine, platform) " \
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                                (file_path, anal_id, md5, timeout, package, options, priority, custom, machine, platform))
             self.conn.commit()
             return self.cursor.lastrowid
         except sqlite3.OperationalError as e:
@@ -138,7 +143,7 @@ class Database:
             return None
         
         try:
-            self.cursor.execute("INSERT INTO analysis "\
+            self.cursor.execute("INSERT INTO analysis " \
                                 "(desc, exe_id) VALUES (?, ?);",
                                 (desc, exe_id))
             self.conn.commit()
@@ -146,19 +151,26 @@ class Database:
         except sqlite3.OperationalError as e:
             return None
 
-    def add_exe(self, file_path):
+    def add_exe(self, file_path, md5):
         """ Add an exe to db
         @param file_path: path to file
         @return: cursor or None
         """
         if not file_path or not os.path.exists(file_path):
             return None
-        
+            
+        # check if md5 is present on db
+        self.cursor.execute("SELECT * FROM exe WHERE md5 = ?;", (md5,))
+        row = self.cursor.fetchone()
+        if row is not None:
+            return row.id
+            
         try:
-            self.cursor.execute("INSERT INTO exe (file_path) VALUES (?);", file_path)
+            self.cursor.execute("INSERT INTO exe (file_path, md5) VALUES (?, ?);",
+                                (file_path, md5))
             self.conn.commit()
             return self.cursor.lastrowid
-        except sqlit3.OperationalError as e:
+        except sqlite3.OperationalError as e:
             return None
             
     def fetch(self):

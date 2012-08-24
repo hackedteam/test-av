@@ -38,9 +38,17 @@ def main():
         return False
 
     db = Database()
-    
+    # Add executable to db
+    exe_id = db.add_exe(file_path=args.path,
+                        md5=File(args.path).get_md5())
+    print("SUCCESS: Created executable id: %d" % exe_id)
+    # Create analysis
+    anal_id = db.add_analysis("New analysis", exe_id)
+    print("SUCCESS: Created new analysis with id: %d" % anal_id)
+    # Add tasks for every machine
     for machine in args.machine.split(","):
         task_id = db.add(file_path=args.path,
+                     anal_id=anal_id,
                      md5=File(args.path).get_md5(),
                      package=args.package,
                      timeout=args.timeout,
@@ -49,7 +57,8 @@ def main():
                      machine=machine,
                      platform=args.platform,
                      custom=args.custom)
-        print("SUCCESS: Task added with id %d for machine %s" % (task_id,machine))
+        print("SUCCESS: Task added with id %d" % task_id)
+        # Sleep needed for multiple VM startup with VMWare
         sleep(5)
         
     print("SUCCESS: All Tasks added to Analysis")
