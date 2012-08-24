@@ -146,7 +146,6 @@ class AnalysisManager(Thread):
                                      % (self.cfg.cuckoo.machine_manager, mman_conf))
         mman.set_options(Config(mman_conf))
         mman.initialize(self.cfg.cuckoo.machine_manager)
-        #vmc = self.options.get(self.task.machine)
         screener = Screener(mman.options.vmware.path, vm.label, "olli", "metal", self.analysis.results_folder)
         
         try:
