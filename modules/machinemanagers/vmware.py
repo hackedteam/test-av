@@ -35,6 +35,8 @@ class VMWare(MachineManager):
             """
         try:
             if subprocess.call([self.options.vmware.path, 
+									"-h", "vcenter5.hackingteam.local",
+									"-u", "m.oliva", "-p", "r54%12XY",
                                     "revertToSnapshot", 
                                     label, 
                                     "current"],
@@ -45,6 +47,8 @@ class VMWare(MachineManager):
             raise CuckooMachineError("vmrun failed restoring the machine: %s" % e.message)
         try:
             subprocess.Popen([self.options.vmware.path,
+							  "-h", "vcenter5.hackingteam.local",
+							  "-u", "m.oliva", "-p", "r54%12XY",
                               "start",
                               label],
                              stdout=subprocess.PIPE,
@@ -61,6 +65,8 @@ class VMWare(MachineManager):
             """
         try:
             if subprocess.call([self.options.vmware.path, 
+								"-h", "vcenter5.hackingteam.local",
+								"-u", "m.oliva", "-p", "r54%12XY",
                                 "stop", 
                                 label],
                                stdout=subprocess.PIPE,
@@ -73,6 +79,8 @@ class VMWare(MachineManager):
         
         try:
             if subprocess.call([self.options.vmware.path, 
+								"-h", "vcenter5.hackingteam.local",
+								"-u", "m.oliva", "-p", "r54%12XY",
                                 "revertToSnapshot", 
                                 label,
                                 "current"],
