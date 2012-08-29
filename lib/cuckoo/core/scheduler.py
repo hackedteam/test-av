@@ -146,7 +146,7 @@ class AnalysisManager(Thread):
                                      % (self.cfg.cuckoo.machine_manager, mman_conf))
         mman.set_options(Config(mman_conf))
         mman.initialize(self.cfg.cuckoo.machine_manager)
-        screener = Screener(mman.options.vmware.path, vm.label, "olli", "metal", self.analysis.results_folder)
+        screener = Screener(mman.options.vmware.path, vm.label, "avtest", "avtest", self.analysis.results_folder)
         
         try:
             # Start machine
