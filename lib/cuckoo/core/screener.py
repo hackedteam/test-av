@@ -38,6 +38,8 @@ class Screener(Thread):
         #first = u"%s/shots/%s.png" % (self.shot_path, "".random.sample(string.letters, 5))
         first = self.shot_path + "/shots/0000.png"
         self.proc = subprocess.Popen([self.vmrun,
+                                    "-h", "https://vcenter5.hackingteam.local/sdk",
+                                    "-u", "m.oliva", "-p", "r54%12XY",
                                     "-gu", "%s" % self.username,
                                     "-gp", "%s" % self.password,
                                     "captureScreen",
@@ -63,6 +65,8 @@ class Screener(Thread):
                 cur = self.shot_path + "/shots/00" + str(idx) + ".png"    
 
             self.proc = subprocess.Popen([self.vmrun,
+                                        "-h", "https://vcenter5.hackingteam.local/sdk",
+                                        "-u", "m.oliva", "-p", "r54%12XY",
                                         "-gu", "%s" % self.username,
                                         "-gp", "%s" % self.password,
                                         "captureScreen",
