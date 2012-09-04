@@ -83,12 +83,8 @@ class GuestManager:
         if not os.path.exists(options["file_path"]):
             return False
 
-<<<<<<< HEAD
-        log.info("Starting analysis on guest (ip=%s)" % self.ip)
-=======
         log.info("Starting analysis on guest (id=%s, ip=%s)" % (self.id, self.ip))
 
->>>>>>> c0a9fefd40d9c1b135c3bb85932e0fd54d9ca675
         socket.setdefaulttimeout(180)
 
         try:

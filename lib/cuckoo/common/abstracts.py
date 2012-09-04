@@ -54,24 +54,6 @@ class MachineManager(object):
         mmanager_opts = self.options.get(module_name)
         
         for machine_id in mmanager_opts["machines"].strip().split(","):
-<<<<<<< HEAD
-            machine_opts = self.options.get(machine_id)
-            machine = Dictionary()
-            machine.id = machine_id
-            machine.label = machine_opts["label"]
-            machine.platform = machine_opts["platform"]
-            machine.ip = machine_opts["ip"]
-            #machine.machine_path = machine_opts["machine_path"]
-            machine.locked = False
-            # vmware check
-            #if machine_opts["machine_path"]:
-                #machine.machine_path = machine_opts["machine_path"]
-            
-            self.machines.append(machine)
-
-        # Run initialization checks.
-        self._initialize_check()
-=======
             try:
                 machine_opts = self.options.get(machine_id)
                 machine = Dictionary()
@@ -84,7 +66,6 @@ class MachineManager(object):
             except (AttributeError, CuckooOperationalError):
                 log.warning("Configuration details about machine %s are missing. Continue" % machine_id)
                 continue
->>>>>>> c0a9fefd40d9c1b135c3bb85932e0fd54d9ca675
 
     def _initialize_check(self):
         """Runs checks against virtualization software when a machine manager is initialized.
