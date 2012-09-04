@@ -35,8 +35,8 @@ class VMWare(MachineManager):
             """
         try:
             if subprocess.call([self.options.vmware.path, 
-									"-h", "vcenter5.hackingteam.local",
-									"-u", "m.oliva", "-p", "r54%12XY",
+									"-h", self.options.vmware.host,
+									"-u", self.options.vmware.user, "-p", self.options.vmware.passwd,
                                     "revertToSnapshot", 
                                     label, 
                                     "current"],
@@ -47,8 +47,9 @@ class VMWare(MachineManager):
             raise CuckooMachineError("vmrun failed restoring the machine: %s" % e.message)
         try:
             subprocess.Popen([self.options.vmware.path,
-							  "-h", "vcenter5.hackingteam.local",
-							  "-u", "m.oliva", "-p", "r54%12XY",
+							  "-T", "vc",
+							  "-h", self.options.vmware.host,
+							  "-u", self.options.vmware.user, "-p", self.options.vmware.passwd,
                               "start",
                               label],
                              stdout=subprocess.PIPE,
@@ -65,8 +66,8 @@ class VMWare(MachineManager):
             """
         try:
             if subprocess.call([self.options.vmware.path, 
-								"-h", "vcenter5.hackingteam.local",
-								"-u", "m.oliva", "-p", "r54%12XY",
+								"-h", self.options.vmware.host,
+								"-u", self.options.vmware.user, "-p", self.options.vmware.passwd,
                                 "stop", 
                                 label],
                                stdout=subprocess.PIPE,
@@ -79,8 +80,8 @@ class VMWare(MachineManager):
         
         try:
             if subprocess.call([self.options.vmware.path, 
-								"-h", "vcenter5.hackingteam.local",
-								"-u", "m.oliva", "-p", "r54%12XY",
+								"-h", self.options.vmware.host,
+								"-u", self.options.vmware.user, "-p", self.options.vmware.passwd,
                                 "revertToSnapshot", 
                                 label,
                                 "current"],
@@ -90,7 +91,7 @@ class VMWare(MachineManager):
         except OSError as e:
             raise CuckooMachineError("vmrun failed restoring the machine: %s" % e.message)
     '''            
-    def _list(self):
+			def _list(self):
         """Lists virtual machines installed.
             @return: virtual machine names list.
             """

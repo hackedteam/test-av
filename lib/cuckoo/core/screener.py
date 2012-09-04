@@ -26,7 +26,8 @@ class Screener(Thread):
     def run(self):
         idx = 1
         # creating a file .pid
-        self.lock_file = '/tmp/lock.pid'
+        #self.lock_file = '/tmp/lock.pid'
+        self.lock_file = 'C:\\WINDOWS\Temp\\lock.pid'
         if not os.path.exists(self.lock_file):
             lock = open(self.lock_file, 'w')
             lock.write("\n\n")
