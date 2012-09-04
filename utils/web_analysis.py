@@ -9,6 +9,7 @@ import logging
 import tempfile
 import hashlib
 import sqlite3
+from time import sleep
 from mako.template import Template
 from mako.lookup import TemplateLookup
 
@@ -68,7 +69,7 @@ def store_and_submit_fileobj(fobj, filename, desc, package="",
                          priority=priority,
                          machine=machine,
                          platform=platform)
-
+        sleep(5)
     return anal_id
 
 @route("/")
