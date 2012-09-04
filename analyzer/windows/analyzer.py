@@ -221,6 +221,8 @@ class Analyzer:
                     options[key.strip()] = value.strip()
             except ValueError:
                 pass
+        if self.config.machine:
+            options["machine"] = self.config.machine
 
         return options
 
