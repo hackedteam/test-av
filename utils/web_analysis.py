@@ -69,7 +69,7 @@ def store_and_submit_fileobj(fobj, filename, desc, package="",
                          priority=priority,
                          machine=machine,
                          platform=platform)
-        sleep(5)
+        sleep(1)
     return anal_id
 
 @route("/")
