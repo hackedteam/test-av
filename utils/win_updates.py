@@ -52,8 +52,8 @@ class Operator:
 
 
 	def powerOn(self):
-        cmd = subprocess.Popen([self.vmrunPath,
-								"-h", self.vsUrl,
+	    cmd = subprocess.Popen([self.vmrunPath,
+	    						"-h", self.vsUrl,
 								"-u", self.vsUser,
 								"-p", self.vsPass,
 								"start", self.vmx ])
