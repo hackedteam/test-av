@@ -1,159 +1,101 @@
-import subprocess
+nimport subprocess
 import ConfigParser
 import sys
-
-'''
-TODO:
- - find virtual machines
- - for each vm:
-   * startup virtual machines
-   * send cmd
-   * delete current snapshot
-   * save new snapshot as current
-   * shutdown vm
-'''
+from time import sleep
 
 class Config:
-    """ Manage a config file with vm
-    """
-    def __init__(self, filename):
-        self.filename = filename
-        self.config = ConfigParser.ConfigParser()
-        self.config.read(self.filename)
-        self.vsPath = self.config.get('vmware','path')
-        '''
-        self.vsUrl = self.config.get('vmware','host')
-        self.vsUser = self.config.get('vmware','user')
-        self.vsPass = self.config.get('vmware','passwd')
-        '''
-        
-    def getVms(self):
-        vms = self.config.get('vmware','machines')
-        return vms.split(",")
+	def __init__(self, conf):
+		self.conf = ConfigParser.ConfigParser()
+		self.file = conf
 
-    def getVmxPath(self, vm):
-        vmx = self.config.get(vm, 'label')
-        return vmx
-
-
-class Operator:
-    """ Operator Class
-    Sends primitive commands to vSphere via vmrun utility
-    """
+	def getVmx(self, vm):
+		self.conf.read(self.file)
+		vmx = self.conf.get(vm, 'label')
+		return vmx
     
-    def __init__(self, vmx, path):
-        self.vmrunPath=path
-        self.vsUrl="https://vcenter5.hackingteam.local/sdk"
-        self.vsUser="avtest"
-        self.vsPass="Av!Auto123"
-        self.vmUser="avtest"
-        self.vmPass="avtest"
-        self.vmx=vmx
+	def getVmrunPath(self):
+		self.conf.read(self.file)
+		path = self.conf.get('vmware','path')
+		return path
+        
+	def getMachines(self):
+		self.conf.read(self.file)
+		vms = self.conf.get('vmware', 'machines').split(",")
+		return vms
 
-
-	def poweron(self):
-	    cmd = subprocess.Popen([self.vmrunPath,
-	    						"-h", self.vsUrl,
-								"-u", self.vsUser,
-								"-p", self.vsPass,
-								"start", self.vmx ])
-
-		
+class Command:
+	def __init__(self, vmx, path):
+		self.vmx = vmx
+		self.path = path
+        
+	def show(self):
+		sys.stdout.write("\r\nshowing all stuff:\nvmx: %s\npath: %s\r\n" % (self.vmx, self.path))
+	
+	def startup(self):
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"start", self.vmx])
+		sys.stdout.write("\r\nStartup %s!\r\n" % vmx)
 	
 	def shutdown(self):
-		cmd = subprocess.Popen([self.vmrunPath,
-								"-h", self.vsUrl,
-								"-u", self.vsUser,
-								"-p", self.vsPass,
-								"stop", self.vmx ])
-
-
-
-    def deleteSnapshot(self, snapshot):
-        cmd = subprocess.Popen([self.vmrunPath,
-								"-h", self.vsUrl,
-								"-u", self.vsUser,
-								"-p", self.vsPass,
-								"deleteSnapshot", self.vmx,
-								snapshot ])
-	
-	
-	def takeSnapshot(self, snapshot):
-	    cmd = subprocess.Popen([self.vmrunPath,
-	                            "-h", self.vsUrl,
-	                            "-u", self.vsUser,
-	                            "-p", self.vsPass,
-    							"snapshot", self.vmx,
-    					        snapshot ])
-
-        
-    
-    def executeCmd(self, script):
-        cmd = subprocess.Popen([vmrunPath,
-    			                "-h", self.vsUrl,
-    							"-u", self.vsUser, "-p", self.vsPass,
-    							"-gu", self.vmUser, "-gp", self.vmPass,
-    							"runProgramInGuest", self.vmx,
-    					        script ])
-        
-
-
-
-class Commander:    
-    """
-    Commander Class
-    Sends operations to Operator for one Virtual Machine specified as input
-    """
-    
-    def __init__(self, vm, path):
-        self.vm = vm
-        self.path = path
-        
-    def startVm(self):
-        #Operator(self.vm, self.path).boot()
-        pass
-        
-    def stopVm(self):
-        Operator(self.vm, self.path).shutdown()
-    
-    def sendUpgrade(self, cmd):
-        Operator(self.vm, self.path).executeCmd(cmd)
-
-    def refreshSnapshot(self, snapshot):
-        Operator(self.vm, self.path).deleteSnapshot(snapshot)
-        Operator(self.vm, self.path).takeSnapshot(snapshot)
-
-        
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"stop", self.vmx])
+		sys.stdout.write("\r\nShutdown %s!\r\n" % vmx)
+		
+	def executeCmd(self, cmd, script):
+		sys.stdout.write("Executing %s %s.\n" % (cmd, script))
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"-gu", "avtest", "-gp", "avtest",
+						"runProgramInGuest", self.vmx, cmd, script])
+						
+	def refreshSnapshot(self, snapshot):
+		sys.stdout.write("Deleting current snapshot.\n")
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"deleteSnapshot", self.vmx, snapshot])
+		sys.stdout.write("Creating new current snapshot.\n")
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"snapshot", self.vmx, snapshot])
+						
+	def revertSnapshot(self, snapshot):
+		sys.stdout.write("Reverting to current snapshot.\n")
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"revertToSnapshot", self.vmx, snapshot])
+		
 
 if __name__ == "__main__":
-    
-    vmware_config_file="conf/vmware.conf"
-    cmd = "C:/script/win_update.bat"
-    snapshot="current"
-    c = Config(vmware_config_file)
-    vms = c.getVms()
-    
-    for vm in vms:
-        #cmd = Commander(c.getVmxPath(vm), c.vsPath)
-        #cmd = Operator(c.getVmxPath(vm), c.vsPath)
-        
-        vmxPath = c.getVmxPath(vm)
-        op = Operator(vmxPath, c.vsPath)
-        sys.stdout.write("Starting Virtual Machine %s" % vm)
-        if not op:
-            print "fuck you"
-            sys.exit(0)
+	config_file = "c:/test-av/conf/vmware.conf"
+	cscriptPath="c:/windows/system32/cscript.exe"
+	scriptPath="c:/script/WUA_SearchDownloadInstall.vbs"
+	conf = Config(config_file)
+	vms = conf.getMachines()
+	exe = conf.getVmrunPath()
+	
+	for vm in vms:
+		#if vm == "gdata" or vm == "kav" or vm == "avira" or vm == "avg":
+		#	continue
+		sys.stdout.write("Updating %s\n" % vm)	
+		vmx = conf.getVmx(vm)
+		cmd = Command(vmx, exe)
+		cmd.revertSnapshot("current")
+		sleep(3)
+		cmd.startup()
+		sleep(10)
+		cmd.executeCmd(cscriptPath,scriptPath)
+		sleep(20)
+		cmd.refreshSnapshot("current")
+		sleep(3)
+		cmd.shutdown()
+		sleep(1)
 
-        op.poweron()
-        
-        sys.stdout.write("Starting Upgrade")
-        #cmd.sendUpgrade(cmd)
-        
-        sys.stdout.write("Refreshing Snapshot")
-        #cmd.refreshSnapshot(snapshot)
-        
-        sys.stdout.write("Stopping Virtual Machine %s" % vm)
-        #cmd.stopVm()
-        
-        sys.stdout.write("Done.")
-    sys.stdout.write("End")    
+
