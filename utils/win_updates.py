@@ -112,7 +112,7 @@ class Commander:
         
     def startVm(self):
         #Operator(self.vm, self.path).boot()
-        continue
+        pass
         
     def stopVm(self):
         Operator(self.vm, self.path).shutdown()
