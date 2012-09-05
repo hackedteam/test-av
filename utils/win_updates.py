@@ -57,7 +57,7 @@ class Operator:
 								"-u", self.vsUser,
 								"-p", self.vsPass,
 								"start", self.vmx ])
-		return cmd
+        return cmd
 		
 	
 	def shutdown(self):
