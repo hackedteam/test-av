@@ -139,7 +139,7 @@ if __name__ == "__main__":
         
         sys.stdout.write("Starting Virtual Machine %s" % vm)
         vmxPath = c.getVmxPath(vm)
-        start = Operator(vmxPath, c.vsPath).powerOn()
+        Operator(vmxPath, c.vsPath).powerOn()
         
         if start:
             sys.stdout.write("Starting Upgrade")
