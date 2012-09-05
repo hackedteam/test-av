@@ -112,7 +112,8 @@ class Commander:
         self.path = path
         
     def startVm(self):
-        Operator(self.vm, self.path).startup()
+        op = Operator(self.vm, self.path)
+        op.startup()
         
     def stopVm(self):
         Operator(self.vm, self.path).shutdown()
