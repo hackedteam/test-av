@@ -117,17 +117,17 @@ class Commander:
         self.op = Operator(vm, path)
         
     def startVm(self):
-        op.start()
+        self.op.start()
         
     def stopVm(self):
-        op.stop()
+        self.op.stop()
     
     def sendUpgrade(self, cmd):
-        op.execute(cmd)
+        self.op.execute(cmd)
 
     def refreshSnapshot(self, snapshot):
-        op.delete(snapshot)
-        op.snapshot(snapshot)
+        self.op.delete(snapshot)
+        self.op.snapshot(snapshot)
 
         
 
