@@ -18,7 +18,7 @@ class Config:
     """
     def __init__(self, filename):
         self.filename = filename
-        self.config = ConfigParser.RawConfigParser()
+        self.config = ConfigParser.ConfigParser()
         self.config.read(self.filename)
         self.vsPath = self.config.get('vmware','path')
         
