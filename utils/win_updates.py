@@ -51,14 +51,13 @@ class Operator:
         self.vmx=vmx
 
 
-	def boot(self):
-	    """Checking for interactive startup
-	    """
+	def powerOn(self):
         cmd = subprocess.Popen([self.vmrunPath,
 								"-h", self.vsUrl,
 								"-u", self.vsUser,
 								"-p", self.vsPass,
 								"start", self.vmx ])
+		return cmd
 		
 	
 	def shutdown(self):
@@ -139,16 +138,18 @@ if __name__ == "__main__":
         cmd = Operator(c.getVmxPath(vm), c.vsPath)
         
         sys.stdout.write("Starting Virtual Machine %s" % vm)
-        cmd.boot()
+        start = cmd.powerOn()
         
-        sys.stdout.write("Starting Upgrade")
-        #cmd.sendUpgrade(cmd)
+        if start:
+            
+            sys.stdout.write("Starting Upgrade")
+            #cmd.sendUpgrade(cmd)
         
-        sys.stdout.write("Refreshing Snapshot")
-        #cmd.refreshSnapshot(snapshot)
+            sys.stdout.write("Refreshing Snapshot")
+            #cmd.refreshSnapshot(snapshot)
         
-        sys.stdout.write("Stopping Virtual Machine %s" % vm)
-        #cmd.stopVm()
+            sys.stdout.write("Stopping Virtual Machine %s" % vm)
+            #cmd.stopVm()
         
-        sys.stdout.write("Done.")
+            sys.stdout.write("Done.")
     sys.stdout.write("End")    
