@@ -85,7 +85,7 @@ class Operator:
 	
 	def snapshot(self, snapshot):
 	    
-        cmd = subprocess.Popen([self.vmrunPath,
+        cmd=subprocess.Popen([self.vmrunPath,
     			                "-h", self.vsUrl,
     							"-u", self.vsUser,
     							"-p", self.vsPass,
