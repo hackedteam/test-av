@@ -21,7 +21,6 @@ class Config:
         self.config = ConfigParser.ConfigParser()
         self.config.read(self.filename)
         self.vsPath = self.config.get('vmware','path')
-        
         '''
         self.vsUrl = self.config.get('vmware','host')
         self.vsUser = self.config.get('vmware','user')
@@ -52,7 +51,7 @@ class Operator:
         self.vmx=vmx
 
 
-	def startup(self):
+	def boot(self):
 	    """Checking for interactive startup
 	    """
         cmd = subprocess.Popen([self.vmrunPath,
@@ -113,7 +112,7 @@ class Commander:
         
     def startVm(self):
         op = Operator(self.vm, self.path)
-        op.startup()
+        op.boot()
         
     def stopVm(self):
         Operator(self.vm, self.path).shutdown()
