@@ -55,6 +55,7 @@ class Operator:
 	def start(self):
 	    """Checking for interactive startup
 	    """
+	    
         cmd = subprocess.Popen([self.vmrunPath,
 								"-h", self.vsUrl,
 								"-u", self.vsUser,
@@ -63,6 +64,7 @@ class Operator:
 		
 	
 	def stop(self, vm):
+	    
 		cmd = subprocess.Popen([self.vmrunPath,
 								"-h", self.vsUrl,
 								"-u", self.vsUser,
@@ -72,6 +74,7 @@ class Operator:
 
 
     def delete(self, snapshot):
+        
         cmd = subprocess.Popen([self.vmrunPath,
 								"-h", self.vsUrl,
 								"-u", self.vsUser,
@@ -81,6 +84,7 @@ class Operator:
 	
 	
 	def snapshot(self, snapshot):
+	    
         cmd = subprocess.Popen([self.vmrunPath,
     			                "-h", self.vsUrl,
     							"-u", self.vsUser,
@@ -91,6 +95,7 @@ class Operator:
         
     
     def execute(self, script):
+        
         cmd = subprocess.Popen([vmrunPath,
     			                "-h", self.vsUrl,
     							"-u", self.vsUser, "-p", self.vsPass,
