@@ -55,7 +55,7 @@ class Operator:
 	def start(self):
 	    """Checking for interactive startup
 	    """
-		cmd = subprocess.Popen([self.vmrunPath,
+        cmd = subprocess.Popen([self.vmrunPath,
 								"-h", self.vsUrl,
 								"-u", self.vsUser,
 								"-p", self.vsPass,
