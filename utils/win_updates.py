@@ -87,7 +87,8 @@ class Operator:
     							"-p", self.vsPass,
     							"snapshot", self.vmx,
     					        snapshot ])
-    
+        
+        
     
     def execute(self, script):
         cmd = subprocess.Popen([vmrunPath,
