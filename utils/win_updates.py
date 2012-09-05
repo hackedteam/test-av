@@ -51,7 +51,7 @@ class Operator:
         self.vmx=vmx
 
 
-	def powerOn(self):
+	def poweron(self):
 	    cmd = subprocess.Popen([self.vmrunPath,
 	    						"-h", self.vsUrl,
 								"-u", self.vsUser,
@@ -143,8 +143,8 @@ if __name__ == "__main__":
         if not op:
             print "fuck you"
             sys.exit(0)
-        print op
-        op.powerOn()
+
+        op.poweron()
         
         sys.stdout.write("Starting Upgrade")
         #cmd.sendUpgrade(cmd)
