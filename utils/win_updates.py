@@ -57,7 +57,7 @@ class Operator:
 								"-u", self.vsUser,
 								"-p", self.vsPass,
 								"start", self.vmx ])
-        return cmd
+
 		
 	
 	def shutdown(self):
@@ -85,7 +85,7 @@ class Operator:
 	                            "-p", self.vsPass,
     							"snapshot", self.vmx,
     					        snapshot ])
-        
+
         
     
     def executeCmd(self, script):
@@ -141,7 +141,6 @@ if __name__ == "__main__":
         start = Operator(c.getVmxPath(vm), c.vsPath).powerOn()
         
         if start:
-            
             sys.stdout.write("Starting Upgrade")
             #cmd.sendUpgrade(cmd)
         
