@@ -137,19 +137,19 @@ if __name__ == "__main__":
         #cmd = Commander(c.getVmxPath(vm), c.vsPath)
         #cmd = Operator(c.getVmxPath(vm), c.vsPath)
         
-        sys.stdout.write("Starting Virtual Machine %s" % vm)
         vmxPath = c.getVmxPath(vm)
-        Operator(vmxPath, c.vsPath).powerOn()
+        op = Operator(vmxPath, c.vsPath)
+        sys.stdout.write("Starting Virtual Machine %s" % vm)
+        op.powerOn()
         
-        if start:
-            sys.stdout.write("Starting Upgrade")
-            #cmd.sendUpgrade(cmd)
+        sys.stdout.write("Starting Upgrade")
+        #cmd.sendUpgrade(cmd)
         
-            sys.stdout.write("Refreshing Snapshot")
-            #cmd.refreshSnapshot(snapshot)
+        sys.stdout.write("Refreshing Snapshot")
+        #cmd.refreshSnapshot(snapshot)
         
-            sys.stdout.write("Stopping Virtual Machine %s" % vm)
-            #cmd.stopVm()
+        sys.stdout.write("Stopping Virtual Machine %s" % vm)
+        #cmd.stopVm()
         
-            sys.stdout.write("Done.")
+        sys.stdout.write("Done.")
     sys.stdout.write("End")    
