@@ -135,10 +135,10 @@ if __name__ == "__main__":
     
     for vm in vms:
         #cmd = Commander(c.getVmxPath(vm), c.vsPath)
-        cmd = Operator(c.getVmxPath(vm), c.vsPath)
+        #cmd = Operator(c.getVmxPath(vm), c.vsPath)
         
         sys.stdout.write("Starting Virtual Machine %s" % vm)
-        start = cmd.powerOn()
+        start = Operator(c.getVmxPath(vm), c.vsPath).powerOn()
         
         if start:
             
