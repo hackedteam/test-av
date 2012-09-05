@@ -67,7 +67,7 @@ class Screener(Thread):
 
             self.proc = subprocess.Popen([self.vmrun,
                                         "-h", "https://vcenter5.hackingteam.local/sdk",
-                                        "-u", "m.oliva", "-p", "r54%12XY",
+                                        "-u", "avtest", "-p", "Av!Auto123",
                                         "-gu", "%s" % self.username,
                                         "-gp", "%s" % self.password,
                                         "captureScreen",

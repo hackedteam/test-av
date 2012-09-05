@@ -20,7 +20,14 @@ class Config:
         self.filename = filename
         self.config = ConfigParser.RawConfigParser()
         self.config.read(self.filename)
-
+        self.vsPath = self.config.get('vmware','path')
+        
+        '''
+        self.vsUrl = self.config.get('vmware','host')
+        self.vsUser = self.config.get('vmware','user')
+        self.vsPass = self.config.get('vmware','passwd')
+        '''
+        
     def getVms(self):
         vms = self.config.get('vmware','machines')
         return vms
@@ -35,11 +42,11 @@ class Operator:
     Sends primitive commands to vSphere via vmrun utility
     """
     
-    def __init__(self, vmx):
-        self.vmrunPath=""
+    def __init__(self, vmx, path):
+        self.vmrunPath=path
         self.vsUrl="https://vcenter5.hackingteam.local/sdk"
         self.vsUser="avtest"
-        self.vsPass="Av!123"
+        self.vsPass="Av!Auto123"
         self.vmUser="avtest"
         self.vmPass="avtest"
         self.vmx=vmx
@@ -127,7 +134,7 @@ if __name__ == "__main__":
     vms = c.getVms()
     
     for vm in vms:
-        cmd = Commander(c.getVmxPath(vm))
+        cmd = Commander(c.getVmxPath(vm), c.vsPath)
         
         sys.stdout.write("Starting Virtual Machine %s" % vm)
         cmd.startVm()
