@@ -133,7 +133,7 @@ class Commander:
 
 if __name__ == "__main__":
     
-    vmware_config_file=""
+    vmware_config_file="conf/vmware.conf"
     cmd = "C:/script/win_update.bat"
     snapshot="current"
     c = Config(vmware_config_file)
