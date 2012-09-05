@@ -111,8 +111,8 @@ class Commander:
         self.path = path
         
     def startVm(self):
-        op = Operator(self.vm, self.path)
-        op.boot()
+        #Operator(self.vm, self.path).boot()
+        continue
         
     def stopVm(self):
         Operator(self.vm, self.path).shutdown()
@@ -135,19 +135,20 @@ if __name__ == "__main__":
     vms = c.getVms()
     
     for vm in vms:
-        cmd = Commander(c.getVmxPath(vm), c.vsPath)
+        #cmd = Commander(c.getVmxPath(vm), c.vsPath)
+        cmd = Operator(c.getVmxPath(vm), c.vsPath)
         
         sys.stdout.write("Starting Virtual Machine %s" % vm)
-        cmd.startVm()
+        cmd.boot()
         
         sys.stdout.write("Starting Upgrade")
-        cmd.sendUpgrade(cmd)
+        #cmd.sendUpgrade(cmd)
         
         sys.stdout.write("Refreshing Snapshot")
-        cmd.refreshSnapshot(snapshot)
+        #cmd.refreshSnapshot(snapshot)
         
         sys.stdout.write("Stopping Virtual Machine %s" % vm)
-        cmd.stopVm()
+        #cmd.stopVm()
         
         sys.stdout.write("Done.")
     sys.stdout.write("End")    
