@@ -112,9 +112,9 @@ class Commander:
     Sends operations to Operator for one Virtual Machine specified as input
     """
     
-    def __init__(self, vm):
+    def __init__(self, vm, path):
         self.vm = vm
-        self.op = Operator(vm)
+        self.op = Operator(vm, path)
         
     def startVm(self):
         op.start()
