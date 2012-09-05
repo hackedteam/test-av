@@ -30,7 +30,7 @@ class Config:
         
     def getVms(self):
         vms = self.config.get('vmware','machines')
-        return vms
+        return vms.split(",")
 
     def getVmxPath(self, vm):
         vmx = self.config.get(vm, 'label')
