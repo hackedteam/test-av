@@ -128,7 +128,7 @@ class Commander:
 if __name__ == "__main__":
     
     vmware_config_file=""
-    cmd = ""
+    cmd = "C:/script/win_update.bat"
     snapshot="current"
     c = Config(vmware_config_file)
     vms = c.getVms()
