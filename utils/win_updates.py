@@ -55,7 +55,6 @@ class Operator:
 	def start(self):
 	    """Checking for interactive startup
 	    """
-	    
         cmd = subprocess.Popen([self.vmrunPath,
 								"-h", self.vsUrl,
 								"-u", self.vsUser,
@@ -63,8 +62,7 @@ class Operator:
 								"start", self.vmx ])
 		
 	
-	def stop(self, vm):
-	    
+	def stop(self):
 		cmd = subprocess.Popen([self.vmrunPath,
 								"-h", self.vsUrl,
 								"-u", self.vsUser,
@@ -74,7 +72,6 @@ class Operator:
 
 
     def delete(self, snapshot):
-        
         cmd = subprocess.Popen([self.vmrunPath,
 								"-h", self.vsUrl,
 								"-u", self.vsUser,
@@ -84,7 +81,6 @@ class Operator:
 	
 	
 	def snapshot(self, snapshot):
-	    
 	    cmd = subprocess.Popen([self.vmrunPath,
 	                            "-h", self.vsUrl,
 	                            "-u", self.vsUser,
@@ -95,7 +91,6 @@ class Operator:
         
     
     def execute(self, script):
-        
         cmd = subprocess.Popen([vmrunPath,
     			                "-h", self.vsUrl,
     							"-u", self.vsUser, "-p", self.vsPass,
@@ -114,20 +109,20 @@ class Commander:
     
     def __init__(self, vm, path):
         self.vm = vm
-        self.op = Operator(vm, path)
+        self.path = path
         
     def startVm(self):
-        self.op.start()
+        Operator(self.vm, self.path).start()
         
     def stopVm(self):
-        self.op.stop()
+        Operator(self.vm, self.path).stop()
     
     def sendUpgrade(self, cmd):
-        self.op.execute(cmd)
+        Operator(self.vm, self.path).execute(cmd)
 
     def refreshSnapshot(self, snapshot):
-        self.op.delete(snapshot)
-        self.op.snapshot(snapshot)
+        Operator(self.vm, self.path).delete(snapshot)
+        Operator(self.vm, self.path).snapshot(snapshot)
 
         
 
