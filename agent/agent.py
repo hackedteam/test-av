@@ -85,7 +85,6 @@ class Agent:
         @param iszip: is a zip file.
         @return: operation status.
         """
-        print "inside agent\ndata %s\n name %s" % (data,name)
         data = data.data
         #root = self._get_root(container="")
         root = "C:\\Windows\\temp\\"
