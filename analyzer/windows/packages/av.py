@@ -17,8 +17,8 @@ class Av(Package):
 
     def start(self, path):
         
-        before = self.list_dir()
-        print before
+        #before = self.list_dir()
+        #print before
         
         p = Process()
 
@@ -26,10 +26,11 @@ class Av(Package):
             p.execute(path=path, args=self.options["arguments"], suspended=True)
         else:
             p.execute(path=path, suspended=True)
-        after = self.list_dir()
         
-        print after
-        
+        #after = self.list_dir()
+        #print after
+        print("sleeping for demo windows")
+        sleep(15)
         return p.pid
 
     def check(self):
