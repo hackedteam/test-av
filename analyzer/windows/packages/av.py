@@ -23,9 +23,9 @@ class Av(Package):
         
         print "this is execution: %s" % x
         
-        if x == False:
-            return False
-            
+        #if x == False:
+        #    return False
+        print p.pid    
         #p.resume()
 
         return p.pid
