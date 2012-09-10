@@ -12,9 +12,9 @@ class Av(Package):
     """EXE analysis package."""
 
     def start(self, path):
-        c = wmi.WMI()
-        self.process_watcher = c.Win32_Process.watch_for("creation")
         p = Process()
+        
+        print "Started analysis AV Package. Lets find EXE file"
 
         if "arguments" in self.options:
             x = p.execute(path=path, args=self.options["arguments"], suspended=False)
@@ -23,7 +23,7 @@ class Av(Package):
         
         print "this is execution: %s" % x
         
-        if not x:
+        if x == False:
             return False
             
         #p.resume()
@@ -31,10 +31,6 @@ class Av(Package):
         return p.pid
 
     def check(self):
-        proc = self.process_watcher()
-        if proc:
-            print proc.Caption
-            return False
         return True
         
     def finish(self):
