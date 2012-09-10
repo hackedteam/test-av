@@ -21,6 +21,8 @@ class Av(Package):
         else:
             x = p.execute(path=path, suspended=True)
         
+        print "this is execution: %s" % x
+        
         if not x:
             return False
             
