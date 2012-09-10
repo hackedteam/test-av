@@ -6,11 +6,14 @@ from lib.common.abstracts import Package
 from lib.api.process import Process
 
 import wmi
+import os
 
 class Av(Package):
     """EXE analysis package."""
 
     def start(self, path):
+        c = wmi.WMI()
+        self.process_watcher = c.Win32_Process.watch_for("creation")
         p = Process()
 
         if "arguments" in self.options:
@@ -23,7 +26,10 @@ class Av(Package):
         return p.pid
 
     def check(self):
-        return True
-
+        proc = self.process_watcher()
+        if proc:
+            return True
+        return False
+        
     def finish(self):
         return True
