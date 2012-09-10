@@ -89,9 +89,9 @@ class Process:
         @param suspended: is suspended.
         @return: operation status.
         """
-        if not os.access(path, os.X_OK):
-            log.info("Problem Accessing to %s." % path)
-            return False
+        #if not os.access(path, os.X_OK):
+        #    log.info("Problem Accessing to %s." % path)
+        #    return False
 
         startup_info = STARTUPINFO()
         startup_info.cb = sizeof(startup_info)
