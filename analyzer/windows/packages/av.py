@@ -29,8 +29,8 @@ class Av(Package):
         proc = self.process_watcher()
         if proc:
             print proc.Caption
-            return True
-        return False
+            return False
+        return True
         
     def finish(self):
         return True
