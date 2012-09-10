@@ -5,7 +5,7 @@
 from lib.common.abstracts import Package
 from lib.api.process import Process
 
-class Exe(Package):
+class Av(Package):
     """EXE analysis package."""
 
     def start(self, path):
