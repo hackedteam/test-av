@@ -90,6 +90,7 @@ class Process:
         @return: operation status.
         """
         if not os.access(path, os.X_OK):
+            log.info("Problem Accessing to %s." % path)
             return False
 
         startup_info = STARTUPINFO()
