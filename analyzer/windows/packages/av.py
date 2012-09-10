@@ -1,16 +1,17 @@
 # Copyright (C) 2010-2012 Cuckoo Sandbox Developers.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
+from lib.common.abstracts import Package
+from lib.api.process import Process
+
 import os
 import wmi
 
-from lib.common.abstracts import Package
-from lib.api.process import Process
 
 class Av(Package):
     """AntiVirus analysis package."""
     def __init__(self):
-        self._agent_dir = "\%APPDATA\%\\.."
+        self._agent_dir = "%APPDATA%\\.."
         self.c = wmi.WMI()
         self.process_watcher = self.c.Win32_Process.watch_for("creation")
     
@@ -34,9 +35,9 @@ class Av(Package):
     def check(self):
         proc = self.process_watcher()
         if proc:
-            print proc.Caption
-        
-        return True
+            return True 
+            #proc.Caption
+        return False
 
     def finish(self):
         return True
