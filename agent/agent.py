@@ -86,8 +86,8 @@ class Agent:
         @return: operation status.
         """
         data = data.data
-        #root = self._get_root(container="")
-        root = "C:\\Windows\\temp\\"
+        root = self._get_root(container="")
+        #root = "C:\\Windows\\temp\\"
         if not root:
             return False
 
