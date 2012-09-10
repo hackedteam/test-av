@@ -201,7 +201,8 @@ class Analyzer:
         self.pipe = PipeServer()
         self.pipe.daemon = True
         self.pipe.start()
-        self.file_path = os.path.join(os.environ["SYSTEMDRIVE"] + os.sep, self.config.file_name)
+        #self.file_path = os.path.join(os.environ["SYSTEMDRIVE"] + os.sep, self.config.file_name)
+        self.file_path = os.path.join("C:\\Users\\avtest\\Documents" + os.sep, self.config.file_name)
 
     def get_options(self):
         """Get analysis options.
@@ -221,7 +222,7 @@ class Analyzer:
                     options[key.strip()] = value.strip()
             except ValueError:
                 pass
-        print options
+
         return options
 
     def complete(self):
