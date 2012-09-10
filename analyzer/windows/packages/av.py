@@ -28,6 +28,7 @@ class Av(Package):
     def check(self):
         proc = self.process_watcher()
         if proc:
+            print proc.Caption
             return True
         return False
         
