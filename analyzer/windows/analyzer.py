@@ -221,7 +221,7 @@ class Analyzer:
                     options[key.strip()] = value.strip()
             except ValueError:
                 pass
-
+        print options
         return options
 
     def complete(self):
