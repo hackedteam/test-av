@@ -17,10 +17,13 @@ class Av(Package):
         p = Process()
 
         if "arguments" in self.options:
-            p.execute(path=path, args=self.options["arguments"], suspended=True)
+            x = p.execute(path=path, args=self.options["arguments"], suspended=True)
         else:
-            p.execute(path=path, suspended=True)
-
+            x = p.execute(path=path, suspended=True)
+        
+        if not x:
+            return False
+            
         p.resume()
 
         return p.pid
