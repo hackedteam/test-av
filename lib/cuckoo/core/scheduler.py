@@ -176,9 +176,9 @@ class AnalysisManager(Thread):
             raise CuckooAnalysisError(e)
         finally:
             # Stop machine
-            mmanager.stop(vm.label)
+            #mmanager.stop(vm.label)
             # Release the machine from lock
-            mmanager.release(vm.label)
+            #mmanager.release(vm.label)
         
         # Launch reports generation
         Reporter(self.analysis.results_folder).run(Processor(self.analysis.results_folder).run())
