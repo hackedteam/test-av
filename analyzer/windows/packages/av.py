@@ -8,26 +8,20 @@ from lib.api.process import Process
 import wmi
 import os
 
+from lib.cuckoo.core.database import Database
+
 class Av(Package):
     """EXE analysis package."""
 
     def start(self, path):
-        p = Process()
+        db = Database()
+        p  = Process()
         
-        print "Started analysis AV Package. Lets find EXE file"
-
         if "arguments" in self.options:
             x = p.execute(path=path, args=self.options["arguments"], suspended=False)
         else:
             x = p.execute(path=path, suspended=False)
-        
-        print "this is execution: %s" % x
-        
-        if x == False:
-            return False
-
-        #p.resume()
-
+        print "Write executon result on database. (%s)" % x
         return p.pid
 
     def check(self):

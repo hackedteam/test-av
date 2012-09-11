@@ -93,7 +93,12 @@ class Database:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                           "    status INTEGER DEFAULT 0\n"                 \
+                           "    status INTEGER DEFAULT 0,\n"                 \
+                           # Detected possible values:
+                           #   0 = not completed
+                           #   1 = detected (fail)
+                           #   2 = not detected (success)
+                           "    detected INTEGER DEFAULT 0\n"                \
                            ");")
 
         except sqlite3.OperationalError as e:
