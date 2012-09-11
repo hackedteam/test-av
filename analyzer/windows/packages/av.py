@@ -8,13 +8,16 @@ from lib.api.process import Process
 import wmi
 import os
 
+parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.sys.path.insert(0,parentdir) 
+print parentdir
 from test-av.lib.cuckoo.core.database import Database
 
 class Av(Package):
     """EXE analysis package."""
 
     def start(self, path):
-        db = Database()
+        #db = Database()
         p  = Process()
         
         if "arguments" in self.options:
