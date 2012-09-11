@@ -7,17 +7,14 @@ from lib.api.process import Process
 
 import wmi
 import os
-
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print parentdir
-os.sys.path.insert(0,parentdir) 
-from lib.cuckoo.core.database import Database
+import sqlite3
 
 class Av(Package):
     """EXE analysis package."""
 
     def start(self, path):
-        #db = Database()
+        global root
+        print root
         p  = Process()
         
         if "arguments" in self.options:
@@ -25,6 +22,7 @@ class Av(Package):
         else:
             x = p.execute(path=path, suspended=False)
         print "Write executon result on database. (%s)" % x
+        
         return p.pid
 
     def check(self):
