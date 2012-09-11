@@ -8,7 +8,7 @@ from lib.api.process import Process
 import wmi
 import os
 
-parentdir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 print parentdir
 os.sys.path.insert(0,parentdir) 
 from lib.cuckoo.core.database import Database
