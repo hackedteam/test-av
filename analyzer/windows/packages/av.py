@@ -19,9 +19,11 @@ class Av(Package):
             x = p.execute(path=path, args=self.options["arguments"], suspended=False)
         else:
             x = p.execute(path=path, suspended=False)
-        print "Write executon result on database. (%s)" % x
-        f = open("C:\\Users\\avtest\\Documents\\results.txt", "wb")
-        f.write(x)
+            
+        string = "Detected:%s" % str(x)
+
+        f = open("C:\\Users\\avtest\\Documents\\cuckoo\\results.txt", "wb")
+        f.write(string)
         f.close()
         
         return p.pid
