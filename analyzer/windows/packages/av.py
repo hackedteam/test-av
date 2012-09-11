@@ -8,7 +8,7 @@ from lib.api.process import Process
 import wmi
 import os
 
-from .lib.cuckoo.core.database import Database
+from cuckoo.lib.cuckoo.core.database import Database
 
 class Av(Package):
     """EXE analysis package."""
