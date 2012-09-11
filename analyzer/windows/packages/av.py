@@ -14,7 +14,7 @@ parentdir = os.path.dirname(
                         os.path.dirname(
                             os.path.abspath("av.py")))))
 os.sys.path.insert(0,parentdir) 
-from cuckoo.lib.cuckoo.core.database import Database
+from lib.cuckoo.core.database import Database
 
 class Av(Package):
     """EXE analysis package."""
