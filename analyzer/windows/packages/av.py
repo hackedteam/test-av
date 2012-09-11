@@ -13,8 +13,6 @@ class Av(Package):
     """EXE analysis package."""
 
     def start(self, path):
-        global root
-        print root
         p  = Process()
         
         if "arguments" in self.options:
@@ -22,6 +20,9 @@ class Av(Package):
         else:
             x = p.execute(path=path, suspended=False)
         print "Write executon result on database. (%s)" % x
+        f = open("C:\\Users\\avtest\\Documents\\results.txt", "wb")
+        f.write(x)
+        f.close()
         
         return p.pid
 
