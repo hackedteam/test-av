@@ -22,7 +22,7 @@ class Av(Package):
             
         string = "Detected:%s" % str(x)
 
-        f = open("C:\\Users\\avtest\\Documents\\cuckoo\\results.txt", "wb")
+        f = open("C:\\cuckoo\\results.txt", "wb")
         f.write(string)
         f.close()
         
