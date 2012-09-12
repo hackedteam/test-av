@@ -56,7 +56,7 @@ def store_and_submit_fileobj(fobj, filename, desc, package="",
     # Create executable record if needed
     exe_id = db.add_exe(file_path=tmpf.name,
                         md5=md5h.hexdigest())
-    print("EXE ID: %s" % exe_id)
+    print("EXE ID: %s" % str(exe_id))
     # Create analysis record
     anal_id = db.add_analysis(desc, exe_id)
     print("ANAL ID: %s" % anal_id)
