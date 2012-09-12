@@ -4,7 +4,7 @@
 
 import os
 import sys
-import sqlite3
+import _mysql
 
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.exceptions import CuckooDatabaseError, CuckooOperationalError
@@ -21,22 +21,22 @@ def dict_factory(cursor, row):
 class Database:
     """Analysis queue database."""
 
-    def __init__(self, db_file=None):
+    def __init__(self):
         """@param db_file: database file path."""
-        if db_file:
-            self.db_file = db_file
-        else:
-            self.db_file = os.path.join(CUCKOO_ROOT, "db", "cuckoo.db")
-
-        self.generate()
-        self.conn = sqlite3.connect(self.db_file, timeout=60)
-        self.conn.row_factory = dict_factory
+        self.hostname = "10.0.20.1"
+        self.username = "avtest"
+        self.password = "avtest"
+        self.dbname   = "avtest"
+        #self.generate()
+        self.conn = _mysql.connect(self.hostname, self.username, self.password, self.dbname)
+        #self.conn.row_factory = dict_factory
         self.cursor = self.conn.cursor()
-
+     
     def generate(self):
         """Create database.
         @return: operation status.
         """
+        '''
         if os.path.exists(self.db_file):
             return False
 
@@ -46,8 +46,8 @@ class Database:
                 create_folder(folder=db_dir)
             except CuckooOperationalError as e:
                 raise CuckooDatabaseError("Unable to create database directory: %s" % e)
-
-        conn = sqlite3.connect(self.db_file)
+        '''
+        conn = _mysql.connect(self.hostname, self.username, self.password, self.dbname)
         cursor = conn.cursor()
 
         try:
@@ -101,11 +101,11 @@ class Database:
                            "    detected INTEGER DEFAULT 0\n"                \
                            ");")
 
-        except sqlite3.OperationalError as e:
+        except _mysql.Error as e:
             raise CuckooDatabaseError("Unable to create database: %s" % e)
 
         return True
-
+    
     def add(self,
             file_path,
             anal_id,
@@ -139,7 +139,7 @@ class Database:
                                 (file_path, anal_id, md5, timeout, package, options, priority, custom, machine, platform))
             self.conn.commit()
             return self.cursor.lastrowid
-        except sqlite3.OperationalError as e:
+        except _mysql.Error as e:
             return None
 
     def add_analysis(self, desc, exe_id):
@@ -157,7 +157,7 @@ class Database:
                                 (desc, exe_id))
             self.conn.commit()
             return self.cursor.lastrowid
-        except sqlite3.OperationalError as e:
+        except _mysql.Error as e:
             return None
 
     def add_exe(self, file_path, md5):
@@ -179,7 +179,7 @@ class Database:
                                 (file_path, md5))
             self.conn.commit()
             return self.cursor.lastrowid
-        except sqlite3.OperationalError as e:
+        except _mysql.Error as e:
             return None
             
     def fetch(self):
@@ -191,7 +191,7 @@ class Database:
                                 "WHERE lock = 0 "      \
                                 "AND status = 0 "      \
                                 "ORDER BY priority DESC, added_on LIMIT 1;")
-        except sqlite3.OperationalError:
+        except _mysql.Error:
             return None
 
         row = self.cursor.fetchone()
@@ -207,7 +207,7 @@ class Database:
             self.cursor.execute("SELECT id FROM tasks WHERE id = ?;",
                                 (task_id,))
             row = self.cursor.fetchone()
-        except sqlite3.OperationalError as e:
+        except _mysql.Error as e:
             return False
 
         if row:
@@ -215,7 +215,7 @@ class Database:
                 self.cursor.execute("UPDATE tasks SET lock = 1 WHERE id = ?;",
                                     (task_id,))
                 self.conn.commit()
-            except sqlite3.OperationalError as e:
+            except _mysql.Error as e:
                 return False
         else:
             return False
@@ -231,7 +231,7 @@ class Database:
             self.cursor.execute("SELECT id FROM tasks WHERE id = ?;",
                                 (task_id,))
             row = self.cursor.fetchone()
-        except sqlite3.OperationalError as e:
+        except _mysql.Error as e:
             return False
 
         if row:
@@ -239,7 +239,7 @@ class Database:
                 self.cursor.execute("UPDATE tasks SET lock = 0 WHERE id = ?;",
                                     (task_id,))
                 self.conn.commit()
-            except sqlite3.OperationalError as e:
+            except _mysql.Error as e:
                 return False
         else:
             return False
@@ -256,7 +256,7 @@ class Database:
             self.cursor.execute("SELECT id FROM tasks WHERE id = ?;",
                                 (task_id,))
             row = self.cursor.fetchone()
-        except sqlite3.OperationalError as e:
+        except _mysql.Error as e:
             return False
 
         if row:
@@ -271,7 +271,7 @@ class Database:
                                     "completed_on = DATETIME('now') " \
                                     "WHERE id = ?;", (status, task_id))
                 self.conn.commit()
-            except sqlite3.OperationalError as e:
+            except _mysql.Error as e:
                 return False
         else:
             return False
@@ -281,7 +281,7 @@ class Database:
     def set_detection(self, task_id, detection):
         try:
             self.cursor.execute("UPDATE tasks SET detection = ? WHERE task_id = ?", (detection, task_id))
-        except sqlite3.OperationalError as e:
+        except _mysql.Error as e:
             return False
             
         return True

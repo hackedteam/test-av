@@ -28,8 +28,15 @@ def main():
     parser.add_argument("-d", "--debug", help="Display debug messages", action="store_true", required=False)
     parser.add_argument("-v", "--version", action="version", version="You are running Cuckoo Sandbox %s" % CUCKOO_VERSION)
     parser.add_argument("-l", "--logo", help="Show artwork", action="store_true", required=False)
+    parser.add_argument("-g", "--generate", help="Generate databse", action="store_true", default=False, required=False)
     args = parser.parse_args()
-
+    
+    if args.generate:
+        log.info("Generating MySQL database.")
+        from lib.cuckoo.core.database import Database
+        db = Database()
+        db.generate()    
+            
     if args.logo:
         import time
         try:
