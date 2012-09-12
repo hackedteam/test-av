@@ -158,7 +158,7 @@ class Database:
             return None
             
         # check if md5 is present on db
-        self.cursor.execute("SELECT * FROM exe WHERE md5 = '%s';" % md5)
+        self.cursor.execute("SELECT * FROM exe WHERE `md5` = '%s';" % md5)
         row = self.cursor.fetchone()
         if row is not None:
             return row
@@ -177,9 +177,9 @@ class Database:
         """
         try:
             self.cursor.execute("SELECT * FROM tasks " \
-                                "WHERE lock = 0 "      \
-                                "AND status = 0 "      \
-                                "ORDER BY priority DESC, added_on LIMIT 1;")
+                                "WHERE `lock` = 0 "      \
+                                "AND `status` = 0 "      \
+                                "ORDER BY `priority` DESC, `added_on` LIMIT 1;")
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to fetch: %s" % e)
 
@@ -193,14 +193,14 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
+            self.cursor.execute("SELECT id FROM tasks WHERE `id` = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to create database: %s" % e)
 
         if row:
             try:
-                self.cursor.execute("UPDATE tasks SET lock = 1 WHERE id = %s;" % task_id)
+                self.cursor.execute("UPDATE tasks SET `lock` = 1 WHERE `id` = %s;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
                 raise CuckooDatabaseError("Unable to lock: %s" % e)
@@ -215,14 +215,14 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
+            self.cursor.execute("SELECT id FROM tasks WHERE `id` = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to create database: %s" % e)
 
         if row:
             try:
-                self.cursor.execute("UPDATE tasks SET lock = 0 WHERE id = %s;" % task_id)
+                self.cursor.execute("UPDATE tasks SET `lock` = 0 WHERE `id` = %s;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
                 raise CuckooDatabaseError("Unable to unlock: %s" % e)
@@ -238,7 +238,7 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
+            self.cursor.execute("SELECT id FROM tasks WHERE `id` = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to create database: %s" % e)
@@ -250,10 +250,10 @@ class Database:
                 status = 1
 
             try:
-                self.cursor.execute("UPDATE tasks SET lock = 0, "     \
-                                    "status = %s, "                    \
-                                    "completed_on = DATETIME('now') " \
-                                    "WHERE id = %s;" % (status, task_id))
+                self.cursor.execute("UPDATE tasks SET `lock` = 0, "     \
+                                    "`status` = %s, "                    \
+                                    "`completed_on` = DATETIME('now') " \
+                                    "WHERE `id` = %s;" % (status, task_id))
                 self.conn.commit()
             except MySQLdb.Error as e:
                 raise CuckooDatabaseError("Unable to complete: %s" % e)
