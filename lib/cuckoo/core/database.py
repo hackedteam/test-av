@@ -123,11 +123,12 @@ class Database:
 
         try:
             print(file_path, anal_id, md5,timeout, package, options, priority, custom, machine, platform)
-            self.cursor.execute("INSERT INTO tasks " \
-                                "(`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) " \
-                                "VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s, %s);" % (file_path, int(anal_id), md5, 
-                                                                                      timeout, package, options, 
-                                                                                      priority, custom, machine, platform))
+            self.cursor.execute(
+                """INSERT INTO tasks 
+                (`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) 
+                VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (file_path, anal_id, md5, 
+                                                                                          timeout, package, options, 
+                                                                                          priority, custom, machine, platform))
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
@@ -145,7 +146,7 @@ class Database:
         try:
             self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES ('%s', %s);" % (desc, exe_id))
             self.conn.commit()
-            return self.cursor.lastrowid
+            return self.cursor.lastrowid[0]
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to create analysis: %s" % e)
 
