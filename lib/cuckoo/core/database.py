@@ -193,7 +193,7 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = %d;", % task_id)
+            self.cursor.execute("SELECT id FROM tasks WHERE id = %d;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             return False
@@ -238,8 +238,7 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = ?;",
-                                (task_id,))
+            self.cursor.execute("SELECT id FROM tasks WHERE id = %d;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             return False
