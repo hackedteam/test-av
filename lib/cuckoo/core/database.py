@@ -124,7 +124,7 @@ class Database:
         try:
             print(file_path, anal_id, md5,timeout, package, options, priority, custom, machine, platform)
             self.cursor.execute("INSERT INTO tasks " \
-                                "(file_path, anal_id, md5, timeout, package, options, priority, custom, machine, platform) " \
+                                "(`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) " \
                                 "VALUES ('%s', %d, '%s', %d, '%s', '%s', %d, '%s', '%s', '%s');" % (file_path, anal_id, md5, 
                                                                                                     timeout, package, options, 
                                                                                                     priority, custom, machine, platform))
@@ -143,7 +143,7 @@ class Database:
             return None
         
         try:
-            self.cursor.execute("INSERT INTO analysis (desc, exe_id) VALUES ('%s', %d);" % (desc, exe_id))
+            self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES ('%s', %d);" % (desc, exe_id))
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
@@ -162,10 +162,10 @@ class Database:
         self.cursor.execute("SELECT * FROM exe WHERE md5 = '%s';" % md5)
         row = self.cursor.fetchone()
         if row is not None:
-            return row[0]
+            return row[
             
         try:
-            self.cursor.execute("INSERT INTO exe (file_path, md5) " \
+            self.cursor.execute("INSERT INTO exe (`file_path`, `md5`) " \
                                 "VALUES ('%s', '%s');" % (file_path, md5))
             self.conn.commit()
             return self.cursor.lastrowid
