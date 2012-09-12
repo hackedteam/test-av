@@ -90,6 +90,7 @@ class AnalysisManager(Thread):
         """
         options = {}
 
+        options["task_id"]   = self.task.id
         options["file_path"] = self.task.file_path
         options["package"] = self.task.package
         options["machine"] = self.task.machine

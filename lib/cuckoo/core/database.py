@@ -96,8 +96,8 @@ class Database:
                            "    `status` INTEGER DEFAULT 0, "                 \
                            # Detected possible values:
                            #   0 = not completed
-                           #   1 = detected (fail)
-                           #   2 = not detected (success)
+                           #   1 = not detected (success)
+                           #   2 = detected (fail!)
                            "    `detected` INTEGER DEFAULT 0 "                \
                            ");")
 
