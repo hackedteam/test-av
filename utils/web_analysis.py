@@ -56,10 +56,10 @@ def store_and_submit_fileobj(fobj, filename, desc, package="",
     # Create executable record if needed
     exe_id = db.add_exe(file_path=tmpf.name,
                         md5=md5h.hexdigest())
-    log.info("EXE ID: %s" % exe_id)
+    print("EXE ID: %s" % exe_id)
     # Create analysis record
     anal_id = db.add_analysis(desc, exe_id)
-    log.info("ANAL ID: %s" % anal_id)
+    print("ANAL ID: %s" % anal_id)
     
     for machine in machines.split(","):
         task_id = db.add(file_path=tmpf.name,
@@ -72,7 +72,7 @@ def store_and_submit_fileobj(fobj, filename, desc, package="",
                          machine=machine,
                          platform=platform)
         sleep(3)
-        log.info("TASK ID: %s" % task_id)
+        print("TASK ID: %s" % task_id)
         
     return anal_id
 
