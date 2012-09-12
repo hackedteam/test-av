@@ -131,7 +131,7 @@ class Database:
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
-            return None
+            raise CuckooDatabaseError("Unable to create database: %s" % e)
 
     def add_analysis(self, desc, exe_id):
         """ Add an analysis on database
@@ -147,16 +147,15 @@ class Database:
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
-            print "MySQL Error: %s" % e
-            return None
+            raise CuckooDatabaseError("Unable to create database: %s" % e)
 
     def add_exe(self, file_path, md5):
         """ Add an exe to db
         @param file_path: path to file
         @return: cursor or None
         """
-        #if not file_path or not os.path.exists(file_path):
-        #    return None
+        if not file_path or not os.path.exists(file_path):
+            return None
             
         # check if md5 is present on db
         self.cursor.execute("SELECT * FROM exe WHERE md5 = '%s';" % md5)
@@ -170,7 +169,7 @@ class Database:
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
-            return None
+            raise CuckooDatabaseError("Unable to create database: %s" % e)
             
     def fetch(self):
         """Fetch a task.
@@ -197,14 +196,14 @@ class Database:
             self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
-            return False
+            raise CuckooDatabaseError("Unable to create database: %s" % e)
 
         if row:
             try:
                 self.cursor.execute("UPDATE tasks SET lock = 1 WHERE id = %s;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
-                return False
+                raise CuckooDatabaseError("Unable to create database: %s" % e)
         else:
             return False
 
@@ -219,14 +218,14 @@ class Database:
             self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
-            return False
+            raise CuckooDatabaseError("Unable to create database: %s" % e)
 
         if row:
             try:
                 self.cursor.execute("UPDATE tasks SET lock = 0 WHERE id = %s;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
-                return False
+                raise CuckooDatabaseError("Unable to create database: %s" % e)
         else:
             return False
 
@@ -242,7 +241,7 @@ class Database:
             self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
-            return False
+            raise CuckooDatabaseError("Unable to create database: %s" % e)
 
         if row:
             if success:
@@ -257,7 +256,7 @@ class Database:
                                     "WHERE id = %s;" % (status, task_id))
                 self.conn.commit()
             except MySQLdb.Error as e:
-                return False
+                raise CuckooDatabaseError("Unable to create database: %s" % e)
         else:
             return False
 
@@ -267,6 +266,5 @@ class Database:
         try:
             self.cursor.execute("UPDATE tasks SET detection = %s WHERE task_id = %s" % (detection, task_id))
         except MySQLdb.Error as e:
-            return False
-            
+            raise CuckooDatabaseError("Unable to create database: %s" % e)            
         return True
