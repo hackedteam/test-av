@@ -8,7 +8,7 @@ import sys
 import logging
 import tempfile
 import hashlib
-import sqlite3
+import MySQLdb
 from time import sleep
 from mako.template import Template
 from mako.lookup import TemplateLookup
@@ -86,7 +86,7 @@ def browse():
     try:
         db.cursor.execute("SELECT * FROM tasks " \
                           "ORDER BY status, added_on DESC;")
-    except sqlite3.OperationalError as e:
+    except MySQLdb.Error as e:
         context["error"] = "Could not load tasks from database."
         return template.render(**context)
 
@@ -105,7 +105,7 @@ def analysis():
     try:
         db.cursor.execute("SELECT * FROM analysis " \
                           "ORDER BY status, created_on DESC;")
-    except sqlite3.OperationalError as e:
+    except MySQLdb.Error as e:
         context["error"] = "Could not load tasks from database."
         return template.render(**context)
 
@@ -128,7 +128,7 @@ def analysis_view(anal_id):
     try:
         db.cursor.execute("SELECT * FROM tasks " \
                           "WHERE anal_id = ?;", (anal_id,))
-    except sqlite3.OperationalError as e:
+    except MySQLdb.Error as e:
         context["error"] = "Could not load analysis from database"
         return template.render(**context)
     

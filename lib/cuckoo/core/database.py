@@ -169,7 +169,7 @@ class Database:
             return None
             
         # check if md5 is present on db
-        self.cursor.execute("SELECT * FROM exe WHERE md5 = ?;", (md5,))
+        self.cursor.execute("SELECT * FROM exe WHERE md5 = ?;", md5)
         row = self.cursor.fetchone()
         if row is not None:
             return row.id
