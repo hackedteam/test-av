@@ -54,13 +54,13 @@ class Database:
             """We need 3 tables: Analysis, tasks and another one 
             needed for executables
             """
-            cursor.execute("CREATE TABLE analysis ("                        \
-                           "    id INTEGER PRIMARY KEY, "                    \
-                           "    desc TEXT DEFAULT NULL, "                    \
-                           "    exe_id INTEGER NOT NULL, "           \
-                           "    created_on DATE DEFAULT CURRENT_TIMESTAMP, " \
-                           "    completed_on DATE DEFAULT NULL, "            \
-                           "    lock INTEGER DEFAULT 0, "                    \
+            cursor.execute("CREATE TABLE analysis ("                        
+                           "id INTEGER PRIMARY KEY,"                    
+                           "desc TEXT DEFAULT NULL,"                    
+                           "exe_id INTEGER NOT NULL,"           
+                           "created_on DATE DEFAULT CURRENT_TIMESTAMP, " 
+                           "completed_on DATE DEFAULT NULL, "            
+                           "lock INTEGER DEFAULT 0, "                    
                            # Status possible values:
                            #   0 = not completed
                            #   1 = error occurred
