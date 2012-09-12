@@ -277,3 +277,11 @@ class Database:
             return False
 
         return True
+
+    def set_detection(self, task_id, detection):
+        try:
+            self.cursor.execute("UPDATE tasks SET detection = ? WHERE task_id = ?", (detection, task_id))
+        except sqlite3.OperationalError as e:
+            return False
+            
+        return True

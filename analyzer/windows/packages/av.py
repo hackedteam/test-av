@@ -5,10 +5,6 @@
 from lib.common.abstracts import Package
 from lib.api.process import Process
 
-import wmi
-import os
-import sqlite3
-
 class Av(Package):
     """EXE analysis package."""
 
