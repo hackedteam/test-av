@@ -131,7 +131,7 @@ class Database:
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to create database: %s" % e)
+            raise CuckooDatabaseError("Unable to add task: %s" % e)
 
     def add_analysis(self, desc, exe_id):
         """ Add an analysis on database
@@ -147,7 +147,7 @@ class Database:
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to create database: %s" % e)
+            raise CuckooDatabaseError("Unable to create analysis: %s" % e)
 
     def add_exe(self, file_path, md5):
         """ Add an exe to db
@@ -169,7 +169,7 @@ class Database:
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to create database: %s" % e)
+            raise CuckooDatabaseError("Unable to add executable: %s" % e)
             
     def fetch(self):
         """Fetch a task.
@@ -181,7 +181,7 @@ class Database:
                                 "AND status = 0 "      \
                                 "ORDER BY priority DESC, added_on LIMIT 1;")
         except MySQLdb.Error:
-            return None
+            raise CuckooDatabaseError("Unable to fetch: %s" % e)
 
         row = self.cursor.fetchone()
 
@@ -203,7 +203,7 @@ class Database:
                 self.cursor.execute("UPDATE tasks SET lock = 1 WHERE id = %s;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
-                raise CuckooDatabaseError("Unable to create database: %s" % e)
+                raise CuckooDatabaseError("Unable to lock: %s" % e)
         else:
             return False
 
@@ -225,7 +225,7 @@ class Database:
                 self.cursor.execute("UPDATE tasks SET lock = 0 WHERE id = %s;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
-                raise CuckooDatabaseError("Unable to create database: %s" % e)
+                raise CuckooDatabaseError("Unable to unlock: %s" % e)
         else:
             return False
 
@@ -256,15 +256,8 @@ class Database:
                                     "WHERE id = %s;" % (status, task_id))
                 self.conn.commit()
             except MySQLdb.Error as e:
-                raise CuckooDatabaseError("Unable to create database: %s" % e)
+                raise CuckooDatabaseError("Unable to complete: %s" % e)
         else:
             return False
 
-        return True
-
-    def set_detection(self, task_id, detection):
-        try:
-            self.cursor.execute("UPDATE tasks SET detection = %s WHERE task_id = %s" % (detection, task_id))
-        except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to create database: %s" % e)            
         return True
