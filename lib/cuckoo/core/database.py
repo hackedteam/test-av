@@ -194,14 +194,14 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = %d;" % task_id)
+            self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             return False
 
         if row:
             try:
-                self.cursor.execute("UPDATE tasks SET lock = 1 WHERE id = %d;" % task_id)
+                self.cursor.execute("UPDATE tasks SET lock = 1 WHERE id = %s;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
                 return False
@@ -216,14 +216,14 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = %d;" % task_id)
+            self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             return False
 
         if row:
             try:
-                self.cursor.execute("UPDATE tasks SET lock = 0 WHERE id = %d;" % task_id)
+                self.cursor.execute("UPDATE tasks SET lock = 0 WHERE id = %s;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
                 return False
@@ -239,7 +239,7 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = %d;" % task_id)
+            self.cursor.execute("SELECT id FROM tasks WHERE id = %s;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             return False
@@ -252,9 +252,9 @@ class Database:
 
             try:
                 self.cursor.execute("UPDATE tasks SET lock = 0, "     \
-                                    "status = %d, "                    \
+                                    "status = %s, "                    \
                                     "completed_on = DATETIME('now') " \
-                                    "WHERE id = %d;" % (status, task_id))
+                                    "WHERE id = %s;" % (status, task_id))
                 self.conn.commit()
             except MySQLdb.Error as e:
                 return False
@@ -265,7 +265,7 @@ class Database:
 
     def set_detection(self, task_id, detection):
         try:
-            self.cursor.execute("UPDATE tasks SET detection = %d WHERE task_id = %d" % (detection, task_id))
+            self.cursor.execute("UPDATE tasks SET detection = %s WHERE task_id = %s" % (detection, task_id))
         except MySQLdb.Error as e:
             return False
             
