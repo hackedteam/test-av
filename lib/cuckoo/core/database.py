@@ -54,23 +54,22 @@ class Database:
             """We need 3 tables: Analysis, tasks and another one 
             needed for executables
             """
-            cursor.execute("CREATE TABLE analysis ("                        
-                           "'id' INTEGER NOT NULL AUTO_INCREMENT,"                    
-                           "'desc' TEXT DEFAULT NULL,"                    
-                           "'exe_id' INTEGER NOT NULL,"           
-                           "'created_on' DATE DEFAULT CURRENT_TIMESTAMP, " 
-                           "'completed_on' DATE DEFAULT NULL, "            
-                           "'lock' INTEGER DEFAULT 0, "                    
+            cursor.execute("CREATE TABLE analysis ("                            \
+                           "id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"    \
+                           "desc TEXT DEFAULT NULL,"                            \
+                           "exe_id INTEGER NOT NULL,"                           \
+                           "created_on DATE DEFAULT CURRENT_TIMESTAMP, "        \
+                           "completed_on DATE DEFAULT NULL, "                   \
+                           "lock INTEGER DEFAULT 0, "                           \
                            # Status possible values:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                           "'status' INTEGER DEFAULT 0,"
-                           "PRIMARY KEY('id')"
+                           "status INTEGER DEFAULT 0"                           \
                            ");")
                            
             cursor.execute("CREATE TABLE exe ("                             \
-                            "   id INTEGER PRIMARY KEY,  "                 \
+                            "   id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"    \
                             "   file_path TEXT NOT NULL, "                 \
                             "    md5 TEXT DEFAULT NULL "                   \
                             ");")
