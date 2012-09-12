@@ -148,6 +148,7 @@ class Database:
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
+            print e
             return None
 
     def add_exe(self, file_path, md5):
