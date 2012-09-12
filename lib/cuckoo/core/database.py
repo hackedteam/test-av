@@ -158,10 +158,9 @@ class Database:
             
         # check if md5 is present on db
         self.cursor.execute("SELECT * FROM exe WHERE md5 = '%s';" % md5)
-        row = self.cursor.fetchone()
+        row = self.cursor.fetchall()
         if row is not None:
-            print row
-            return row.id
+            return row[0].id
             
         try:
             self.cursor.execute("INSERT INTO exe (file_path, md5) " \
