@@ -162,7 +162,7 @@ class Database:
         self.cursor.execute("SELECT * FROM exe WHERE md5 = '%s';" % md5)
         row = self.cursor.fetchone()
         if row is not None:
-            return row[
+            return row
             
         try:
             self.cursor.execute("INSERT INTO exe (`file_path`, `md5`) " \
