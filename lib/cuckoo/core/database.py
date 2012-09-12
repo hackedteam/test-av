@@ -125,7 +125,7 @@ class Database:
             print(file_path, anal_id, md5,timeout, package, options, priority, custom, machine, platform)
             self.cursor.execute("INSERT INTO tasks " \
                                 "(`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) " \
-                                "VALUES ('%s', %d, '%s', %d, '%s', '%s', %d, '%s', '%s', '%s');" % (file_path, anal_id, md5, 
+                                "VALUES ('%s', %s, '%s', %s, '%s', '%s', %s, '%s', '%s', '%s');" % (file_path, anal_id, md5, 
                                                                                                     timeout, package, options, 
                                                                                                     priority, custom, machine, platform))
             self.conn.commit()
