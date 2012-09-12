@@ -145,10 +145,9 @@ class Database:
         try:
             self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES ('%s', %s);" % (desc, exe_id))
             self.conn.commit()
-            print self.cursor.lastrowid
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
-            print e
+            print "MySQL Error: %s" % e
             return None
 
     def add_exe(self, file_path, md5):
@@ -156,8 +155,8 @@ class Database:
         @param file_path: path to file
         @return: cursor or None
         """
-        if not file_path or not os.path.exists(file_path):
-            return None
+        #if not file_path or not os.path.exists(file_path):
+        #    return None
             
         # check if md5 is present on db
         self.cursor.execute("SELECT * FROM exe WHERE md5 = '%s';" % md5)
