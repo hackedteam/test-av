@@ -144,7 +144,7 @@ class Database:
             return None
         
         try:
-            self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES ('%s', '%s');" % (desc, exe_id[0]))
+            self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES ('%s', '%s');" % (desc, exe_id))
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
