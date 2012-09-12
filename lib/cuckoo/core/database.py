@@ -55,17 +55,18 @@ class Database:
             needed for executables
             """
             cursor.execute("CREATE TABLE analysis ("                        
-                           "id INTEGER PRIMARY KEY,"                    
-                           "desc TEXT DEFAULT NULL,"                    
-                           "exe_id INTEGER NOT NULL,"           
-                           "created_on DATE DEFAULT CURRENT_TIMESTAMP, " 
-                           "completed_on DATE DEFAULT NULL, "            
-                           "lock INTEGER DEFAULT 0, "                    
+                           "'id' INTEGER NOT NULL AUTO_INCREMENT,"                    
+                           "'desc' TEXT DEFAULT NULL,"                    
+                           "'exe_id' INTEGER NOT NULL,"           
+                           "'created_on' DATE DEFAULT CURRENT_TIMESTAMP, " 
+                           "'completed_on' DATE DEFAULT NULL, "            
+                           "'lock' INTEGER DEFAULT 0, "                    
                            # Status possible values:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                           "    status INTEGER DEFAULT 0 "                 \
+                           "'status' INTEGER DEFAULT 0,"
+                           "PRIMARY KEY('id')"
                            ");")
                            
             cursor.execute("CREATE TABLE exe ("                             \
