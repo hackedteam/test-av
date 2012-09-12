@@ -55,50 +55,50 @@ class Database:
             needed for executables
             """
             cursor.execute("CREATE TABLE analysis ("                            \
-                           "id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"    \
-                           "desc TEXT DEFAULT NULL,"                            \
-                           "exe_id INTEGER NOT NULL,"                           \
-                           "created_on DATE DEFAULT CURRENT_TIMESTAMP, "        \
-                           "completed_on DATE DEFAULT NULL, "                   \
-                           "lock INTEGER DEFAULT 0, "                           \
+                           "    `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"    \
+                           "    `desc` TEXT NULL,"                            \
+                           "    `exe_id` INTEGER NOT NULL,"                           \
+                           "    `created_on` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "        \
+                           "    `completed_on` TIMESTAMP NULL, "                   \
+                           "    `lock` INTEGER DEFAULT 0, "                           \
                            # Status possible values:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                           "status INTEGER DEFAULT 0"                           \
+                           "`status` INTEGER DEFAULT 0"                           \
                            ");")
                            
             cursor.execute("CREATE TABLE exe ("                             \
-                            "   id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"    \
-                            "   file_path TEXT NOT NULL, "                 \
-                            "    md5 TEXT DEFAULT NULL "                   \
+                            "   `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"    \
+                            "   `file_path` TEXT NOT NULL, "                 \
+                            "   `md5` TEXT NULL "                   \
                             ");")
             
             cursor.execute("CREATE TABLE tasks ( "                         \
-                           "    id INTEGER PRIMARY KEY, "                  \
-                           "    anal_id INTEGER NOT NULL, "                \
-                           "    md5 TEXT DEFAULT NULL, "                   \
-                           "    file_path TEXT NOT NULL, "                 \
-                           "    timeout INTEGER DEFAULT NULL, "            \
-                           "    priority INTEGER DEFAULT 0, "              \
-                           "    custom TEXT DEFAULT NULL, "                \
-                           "    machine TEXT DEFAULT NULL, "               \
-                           "    package TEXT DEFAULT NULL, "               \
-                           "    options TEXT DEFAULT NULL, "               \
-                           "    platform TEXT DEFAULT NULL, "              \
-                           "    added_on DATE DEFAULT CURRENT_TIMESTAMP, " \
-                           "    completed_on DATE DEFAULT NULL, "          \
-                           "    lock INTEGER DEFAULT 0, "                  \
+                           "    `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, "                  \
+                           "    `anal_id` INTEGER NOT NULL, "                \
+                           "    `md5` TEXT NULL, "                   \
+                           "    `file_path` TEXT NOT NULL, "                 \
+                           "    `timeout` INTEGER DEFAULT NULL, "            \
+                           "    `priority` INTEGER DEFAULT 0, "              \
+                           "    `custom` TEXT NULL, "                \
+                           "    `machine` TEXT NULL, "               \
+                           "    `package` TEXT NULL, "               \
+                           "    `options` TEXT NULL, "               \
+                           "    `platform` TEXT NULL, "              \
+                           "    `added_on` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " \
+                           "    `completed_on` TIMESTAMP NULL, "          \
+                           "    `lock` INTEGER DEFAULT 0, "                  \
                            # Status possible values:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                           "    status INTEGER DEFAULT 0, "                 \
+                           "    `status` INTEGER DEFAULT 0, "                 \
                            # Detected possible values:
                            #   0 = not completed
                            #   1 = detected (fail)
                            #   2 = not detected (success)
-                           "    detected INTEGER DEFAULT 0 "                \
+                           "    `detected` INTEGER DEFAULT 0 "                \
                            ");")
 
         except MySQLdb.Error as e:
