@@ -180,7 +180,7 @@ class Database:
                                 "WHERE lock = 0 "      \
                                 "AND status = 0 "      \
                                 "ORDER BY priority DESC, added_on LIMIT 1;")
-        except MySQLdb.Error:
+        except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to fetch: %s" % e)
 
         row = self.cursor.fetchone()
