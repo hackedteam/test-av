@@ -36,17 +36,6 @@ class Database:
         """Create database.
         @return: operation status.
         """
-        '''
-        if os.path.exists(self.db_file):
-            return False
-
-        db_dir = os.path.dirname(self.db_file)
-        if not os.path.exists(db_dir):
-            try:
-                create_folder(folder=db_dir)
-            except CuckooOperationalError as e:
-                raise CuckooDatabaseError("Unable to create database directory: %s" % e)
-        '''
         conn = MySQLdb.connect(self.hostname, self.username, self.password, self.dbname)
         cursor = conn.cursor()
 
@@ -135,7 +124,7 @@ class Database:
         try:
             self.cursor.execute("INSERT INTO tasks " \
                                 "(file_path, anal_id, md5, timeout, package, options, priority, custom, machine, platform) " \
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                                "VALUES ('%s', %d, '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s');" %
                                 (file_path, anal_id, md5, timeout, package, options, priority, custom, machine, platform))
             self.conn.commit()
             return self.cursor.lastrowid
@@ -153,7 +142,7 @@ class Database:
         
         try:
             self.cursor.execute("INSERT INTO analysis " \
-                                "(desc, exe_id) VALUES (?, ?);",
+                                "(desc, exe_id) VALUES '%s', %d);",
                                 (desc, exe_id))
             self.conn.commit()
             return self.cursor.lastrowid
@@ -175,8 +164,8 @@ class Database:
             return row.id
             
         try:
-            self.cursor.execute("INSERT INTO exe (file_path, md5) VALUES (?, ?);",
-                                (file_path, md5))
+            self.cursor.execute("INSERT INTO exe (file_path, md5) " \
+                                "VALUES ('%s', '%s');" % (file_path, md5))
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
@@ -204,16 +193,14 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = ?;",
-                                (task_id,))
+            self.cursor.execute("SELECT id FROM tasks WHERE id = %d;", % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             return False
 
         if row:
             try:
-                self.cursor.execute("UPDATE tasks SET lock = 1 WHERE id = ?;",
-                                    (task_id,))
+                self.cursor.execute("UPDATE tasks SET lock = 1 WHERE id = %d;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
                 return False
@@ -228,16 +215,14 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE id = ?;",
-                                (task_id,))
+            self.cursor.execute("SELECT id FROM tasks WHERE id = %d;" % task_id)
             row = self.cursor.fetchone()
         except MySQLdb.Error as e:
             return False
 
         if row:
             try:
-                self.cursor.execute("UPDATE tasks SET lock = 0 WHERE id = ?;",
-                                    (task_id,))
+                self.cursor.execute("UPDATE tasks SET lock = 0 WHERE id = %d;" % task_id)
                 self.conn.commit()
             except MySQLdb.Error as e:
                 return False
@@ -267,9 +252,9 @@ class Database:
 
             try:
                 self.cursor.execute("UPDATE tasks SET lock = 0, "     \
-                                    "status = ?, "                    \
+                                    "status = %d, "                    \
                                     "completed_on = DATETIME('now') " \
-                                    "WHERE id = ?;", (status, task_id))
+                                    "WHERE id = %d;" % (status, task_id))
                 self.conn.commit()
             except MySQLdb.Error as e:
                 return False
@@ -280,7 +265,7 @@ class Database:
 
     def set_detection(self, task_id, detection):
         try:
-            self.cursor.execute("UPDATE tasks SET detection = ? WHERE task_id = ?", (detection, task_id))
+            self.cursor.execute("UPDATE tasks SET detection = %d WHERE task_id = %d" % (detection, task_id))
         except MySQLdb.Error as e:
             return False
             
