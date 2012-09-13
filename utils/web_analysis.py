@@ -63,7 +63,7 @@ def store_and_submit_fileobj(fobj, filename, desc, package="",
     
     for machine in machines.split(","):
         task_id = db.add(file_path=tmpf.name,
-                         anal_id=a_id,
+                         a_id=a_id,
                          md5=md5h.hexdigest(),
                          package=package,
                          timeout=timeout,
