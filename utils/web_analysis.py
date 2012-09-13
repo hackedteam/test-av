@@ -74,7 +74,7 @@ def store_and_submit_fileobj(fobj, filename, desc, package="",
         sleep(3)
         print("TASK ID: %s" % task_id)
         
-    return anal_id
+    return a_id
 
 @route("/")
 def index():
