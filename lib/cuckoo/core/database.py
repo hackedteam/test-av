@@ -5,7 +5,8 @@
 import os
 import sys
 import MySQLdb
-from MySQLdb.cursors import DictCursor
+#from MySQLdb.cursors import DictCursor
+from MySQLdb.cursors import Cursor
 
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.exceptions import CuckooDatabaseError, CuckooOperationalError
@@ -31,7 +32,7 @@ class Database:
         #self.generate()
         self.conn = MySQLdb.connect(self.hostname, self.username, self.password, self.dbname)
         self.conn.row_factory = dict_factory
-        self.cursor = self.conn.cursor(DictCursor)
+        self.cursor = self.conn.cursor(Cursor)
      
     def generate(self):
         """Create database.
