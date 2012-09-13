@@ -127,7 +127,7 @@ class Database:
             self.cursor.execute(
                 """INSERT INTO tasks 
                 (`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""", (file_path, a_id, md5, timeout, package, options, priority, custom, machine, platform))
+                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s);""", (file_path, a_id, md5, timeout, package, options, priority, custom, machine, platform))
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
