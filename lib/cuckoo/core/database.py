@@ -187,8 +187,9 @@ class Database:
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to fetch: %s" % e)
 
-        row = self.cursor.fetchone()
-
+        row = dict_factory(self.cursor.fetchone())
+        #for key, value in self.cursor.fetchone():
+            
         return row
 
     def lock(self, task_id):
