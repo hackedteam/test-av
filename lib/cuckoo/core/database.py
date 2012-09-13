@@ -30,7 +30,7 @@ class Database:
         self.dbname   = "avtest"
         #self.generate()
         self.conn = MySQLdb.connect(self.hostname, self.username, self.password, self.dbname)
-        #self.conn.row_factory = dict_factory
+        self.conn.row_factory = dict_factory
         self.cursor = self.conn.cursor(DictCursor)
      
     def generate(self):
