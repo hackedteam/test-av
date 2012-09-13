@@ -143,7 +143,7 @@ class Database:
             return None
         
         try:
-            self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES (?, ?);", (desc, exe_id))
+            self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES (%s, %s);", (desc, exe_id))
             self.conn.commit()
             print "Last Row ID: %s" % str(self.cursor.lastrowid)
             return self.cursor.lastrowid
@@ -166,7 +166,7 @@ class Database:
             
         try:
             self.cursor.execute("""INSERT INTO exe (`file_path`, `md5`)
-                                VALUES (?, ?);""", (file_path, md5))
+                                VALUES (%s, %s);""", (file_path, md5))
             self.conn.commit()
             return int(self.cursor.lastrowid)
         except MySQLdb.Error as e:
