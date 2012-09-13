@@ -121,6 +121,9 @@ class Database:
         """
         if not file_path or not os.path.exists(file_path):
             return None
+            
+        if not timeout:
+            timeout = 0
 
         try:
             print(file_path, a_id, md5, timeout, package, options, priority, custom, machine, platform)
