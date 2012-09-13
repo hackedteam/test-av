@@ -143,7 +143,7 @@ class Database:
             return None
         
         try:
-            self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES (%s, %s);", (desc, exe_id))
+            self.cursor.execute("""INSERT INTO analysis (`desc`, `exe_id`) VALUES (%s, %s);""", (desc, exe_id))
             self.conn.commit()
             print "Last Row ID: %s" % str(self.cursor.lastrowid)
             return self.cursor.lastrowid
