@@ -123,7 +123,7 @@ class Database:
             return None
 
         try:
-            #print(file_path, anal_id, md5,timeout, package, options, priority, custom, machine, platform)
+            print(file_path, a_id, md5, timeout, package, options, priority, custom, machine, platform)
             self.cursor.execute(
                 """INSERT INTO tasks 
                 (`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) 
