@@ -159,16 +159,16 @@ class Database:
             return None
             
         # check if md5 is present on db
-        self.cursor.execute("SELECT * FROM exe WHERE `md5` = '%s';" % md5)
-        row = self.cursor.fetchone()
+        self.cursor.execute("SELECT id FROM exe WHERE `md5` = '%s';" % md5)
+        id = self.cursor.fetchone()
         if row is not None:
-            return row.id
+            return int(id)
             
         try:
             self.cursor.execute("INSERT INTO exe (`file_path`, `md5`) " \
                                 "VALUES (?, ?);", (file_path, md5))
             self.conn.commit()
-            return self.cursor.lastrowid
+            return int(self.cursor.lastrowid)
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to add executable: %s" % e)
             
