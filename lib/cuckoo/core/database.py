@@ -124,9 +124,9 @@ class Database:
         try:
             print(file_path, anal_id, md5,timeout, package, options, priority, custom, machine, platform)
             self.cursor.execute(
-                """INSERT INTO tasks 
-                (`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""", (file_path, anal_id, md5, timeout, package, options, 
+                "INSERT INTO tasks " \
+                "(`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) " \
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", (file_path, anal_id, md5, timeout, package, options, 
                                                            priority, custom, machine, platform))
             self.conn.commit()
             return self.cursor.lastrowid
@@ -145,6 +145,7 @@ class Database:
         try:
             self.cursor.execute("INSERT INTO analysis (`desc`, `exe_id`) VALUES (?, ?);", (desc, exe_id))
             self.conn.commit()
+            print "Last Row ID: %s" % str(self.cursor.lastrowid)
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to create analysis: %s" % e)
@@ -158,14 +159,14 @@ class Database:
             return None
             
         # check if md5 is present on db
-        self.cursor.execute("""SELECT * FROM exe WHERE `md5` = ?;""", (md5,))
+        self.cursor.execute("SELECT * FROM exe WHERE `md5` = ?;", (md5,))
         row = self.cursor.fetchone()
         if row is not None:
             return row
             
         try:
-            self.cursor.execute("""INSERT INTO exe (`file_path`, `md5`) 
-                                VALUES (?, ?);""", (file_path, md5))
+            self.cursor.execute("INSERT INTO exe (`file_path`, `md5`) " \
+                                "VALUES (?, ?);", (file_path, md5))
             self.conn.commit()
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
