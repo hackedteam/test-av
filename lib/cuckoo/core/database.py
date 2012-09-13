@@ -168,7 +168,8 @@ class Database:
             self.cursor.execute("""INSERT INTO exe (`file_path`, `md5`)
                                 VALUES (%s, %s);""", (file_path, md5))
             self.conn.commit()
-            return int(self.cursor.lastrowid)
+            #return int(self.cursor.lastrowid)
+            return conn.insert_id()
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to add executable: %s" % e)
             
