@@ -5,6 +5,7 @@
 import os
 import sys
 import MySQLdb
+from MySQLdb.cursor import DictCursor
 
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.exceptions import CuckooDatabaseError, CuckooOperationalError
