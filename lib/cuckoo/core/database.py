@@ -5,8 +5,8 @@
 import os
 import sys
 import MySQLdb
-#from MySQLdb.cursors import DictCursor
-from MySQLdb.cursors import Cursor
+from MySQLdb.cursors import DictCursor
+#from MySQLdb.cursors import Cursor
 
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.exceptions import CuckooDatabaseError, CuckooOperationalError
@@ -188,11 +188,11 @@ class Database:
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to fetch: %s" % e)
         
-        row = {}
         #row = dict_factory(self.cursor.fetchone())
         #for column in self.cursor.fetchone():
         #    row += dict_factory(self.cursor.fetchone(), column)
-        row = self.cursor.fetchone()    
+        r = self.cursor.fetchone()
+        row = dict_factory(self.cursor, r)
         return row
 
     def lock(self, task_id):
