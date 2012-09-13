@@ -29,8 +29,8 @@ class Database:
         self.dbname   = "avtest"
         #self.generate()
         self.conn = MySQLdb.connect(self.hostname, self.username, self.password, self.dbname)
-        self.conn.row_factory = dict_factory
-        self.cursor = self.conn.cursor()
+        #self.conn.row_factory = dict_factory
+        self.cursor = self.conn.cursor(DictCursor)
      
     def generate(self):
         """Create database.
@@ -145,7 +145,6 @@ class Database:
         try:
             self.cursor.execute("""INSERT INTO analysis (`desc`, `exe_id`) VALUES (%s, %s);""", (desc, exe_id))
             self.conn.commit()
-            print "Last Row ID: %s" % str(self.cursor.lastrowid)
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to create analysis: %s" % e)
