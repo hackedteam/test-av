@@ -159,14 +159,14 @@ class Database:
             return None
             
         # check if md5 is present on db
-        self.cursor.execute("SELECT id FROM exe WHERE `md5` = '%s';" % md5)
+        self.cursor.execute("""SELECT id FROM exe WHERE `md5` = '%s';""", (md5,))
         id = self.cursor.fetchone()
         if id is not None:
             return int(id)
             
         try:
-            self.cursor.execute("INSERT INTO exe (`file_path`, `md5`) " \
-                                "VALUES (?, ?);", (file_path, md5))
+            self.cursor.execute("""INSERT INTO exe (`file_path`, `md5`)
+                                VALUES (?, ?);""", (file_path, md5))
             self.conn.commit()
             return int(self.cursor.lastrowid)
         except MySQLdb.Error as e:
