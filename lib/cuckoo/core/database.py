@@ -186,9 +186,11 @@ class Database:
                                 "ORDER BY `priority` DESC, `added_on` LIMIT 1;")
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to fetch: %s" % e)
-
-        row = dict_factory(self.cursor.fetchone())
-        #for key, value in self.cursor.fetchone():
+        
+        row = {}
+        #row = dict_factory(self.cursor.fetchone())
+        for column in self.cursor.fetchone():
+            row += dict_factory(self.cursor.fetchone(), column)
             
         return row
 
