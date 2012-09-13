@@ -161,7 +161,7 @@ class Database:
         # check if md5 is present on db
         self.cursor.execute("""SELECT * FROM exe WHERE `md5` = %s;""", (md5,))
         row = self.cursor.fetchone()
-        print row
+        print type(row["id"])
         if row is not None:
             return row.id
             
