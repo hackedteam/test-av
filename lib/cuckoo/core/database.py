@@ -189,9 +189,9 @@ class Database:
         
         row = {}
         #row = dict_factory(self.cursor.fetchone())
-        for column in self.cursor.fetchone():
-            row += dict_factory(self.cursor.fetchone(), column)
-            
+        #for column in self.cursor.fetchone():
+        #    row += dict_factory(self.cursor.fetchone(), column)
+        row = self.cursor.fetchone()    
         return row
 
     def lock(self, task_id):
