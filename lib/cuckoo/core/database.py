@@ -249,7 +249,7 @@ class Database:
     def fetch(self):
         try:
             task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(Task.priority)).first()
-            print "fetching task %s" %s
+            #log.debug("fetching task %s" %s)
             return task
             
         except SQLAlchemyError as e:
@@ -304,9 +304,9 @@ class Database:
         try:
             task = s.query(Task).filter_by(id=task_id).first()
         except SQLAlchemyError as e:
-            raise CuckooDatabaseError("Unable to find lock, reason: %s" % e)
+            raise CuckooDatabaseError("Unable to find locked task, reason: %s" % e)
         
-        if row:
+        if task:
             if success:
                 task.status = 2
             else:
