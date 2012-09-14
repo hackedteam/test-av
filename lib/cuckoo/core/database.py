@@ -94,6 +94,8 @@ class Task(Base):
 		self.package = package
 		self.options = options
 		self.platform = platform
+		self.lock = 0
+		self.status = 0
         
 
 class Database:
@@ -190,10 +192,6 @@ class Database:
             
         if not timeout:
             timeout = 0
-        if not lock:
-            lock = 0
-        if not status:
-            status = 0
             
         try:
             task = Task(file_path,
@@ -251,7 +249,6 @@ class Database:
     def fetch(self):
         try:
             task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(Task.priority)).first()
-            print task
             return task
             
         except SQLAlchemyError as e:
