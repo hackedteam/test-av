@@ -190,6 +190,10 @@ class Database:
             
         if not timeout:
             timeout = 0
+        if not lock:
+            lock = 0
+        if not status:
+            status = 0
             
         try:
             task = Task(file_path,
