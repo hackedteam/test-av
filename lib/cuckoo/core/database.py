@@ -73,7 +73,9 @@ class Task(Base):
 	status = Column(Integer)
 	detected = Column(Integer)
 
-	def __init__(self, desc, exe_id):
+	def __init__(self, 
+	             id, 
+	             a_id):
 		self.id = id
 		self.a_id = a_id
 		self.md5 = md5
