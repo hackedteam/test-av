@@ -29,10 +29,10 @@ class Av(Package):
         
         if x == True:
             cursor.execute("UPDATE tasks SET detected = ? WHERE task_id = ?",
-                            (1, options["task_id"]))
+                            (1, self.options["task_id"]))
         elif x == False:
             cursor.execute("UPDATE tasks SET detected = ? WHERE task_id = ?",
-                            (2, options["task_id"]))
+                            (2, self.options["task_id"]))
         else:
             return False
         
