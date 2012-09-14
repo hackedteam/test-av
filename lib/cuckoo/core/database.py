@@ -4,35 +4,71 @@
 
 import os
 import sys
-import MySQLdb
-from MySQLdb.cursors import DictCursor
-#from MySQLdb.cursors import Cursor
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, Text, DateTime
 
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.exceptions import CuckooDatabaseError, CuckooOperationalError
 from lib.cuckoo.common.abstracts import Dictionary
 from lib.cuckoo.common.utils import create_folder
 
-# From http://docs.python.org/library/sqlite3.html
-def dict_factory(cursor, row):
-    d = Dictionary()
-    for idx, col in enumerate(cursor.description):
-        setattr(d, col[0], row[idx])
-    return d
+# SQL Alchemy init time
+engine = create_engine("mysql://avtest:avtest@172.20.20.196:3306/avtest")
+Session = sessionmaker(bind=engine)
+s = Session()
+Base = declarative_base()
+# Table Exe abstraction
+class Exe(Base):
+
+	__tablename__ = "exe"
+	
+	id = Column(Integer, primary_key=True)
+	file_path = Column(Text)
+	md5 = Column(Text)
+	
+	def __init__(self, file_path, md5):
+		self.file_path = file_path
+		self.md5 = md5
+# Table Analysis abstraction
+class Analysis(Base):
+	__tablename__ = "analysis"
+	
+	id = Column(Integer, primary_key=True)
+	desc = Column(Text)
+	exe_id = Column(Integer)
+	created_on = Column(DateTime)
+	completed_on = Column(DateTime)
+	lock = Column(Integer)
+	status = Column(Integer)
+	
+	def __init__(self, desc, exe_id):
+		self.desc = desc
+		self.exe_id = exe_id
+# Table Tasks abstraction
+class Task(Base):
+	__tablename__ = "tasks"
+	
+	id = Column(Integer, primary_key=True)
+	a_id = Column("anal_id", Integer)
+	md5 = Column(Text)
+	file_path = Column(Text)
+	timeout = Column(Integer)
+	priority = Column(Integer)
+	custom = Column(Text)
+	machine = Column(Text)
+	package = Column(Text)
+	options = Column(Text)
+	platform = Column(Text)
+	lock = Column(Integer)
+	status = Column(Integer)
+	detected = Column(Integer)
+
 
 class Database:
     """Analysis queue database."""
-
-    def __init__(self):
-        """@param db_file: database file path."""
-        self.hostname = "10.0.20.1"
-        self.username = "avtest"
-        self.password = "avtest"
-        self.dbname   = "avtest"
-        #self.generate()
-        self.conn = MySQLdb.connect(self.hostname, self.username, self.password, self.dbname)
-        #self.conn.row_factory = dict_factory
-        self.cursor = self.conn.cursor(DictCursor)
      
     def generate(self):
         """Create database.
@@ -56,7 +92,7 @@ class Database:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                           "`status` INTEGER DEFAULT 0"                           \
+                               "    `status` INTEGER DEFAULT 0"                           \
                            ");")
                            
             cursor.execute("CREATE TABLE exe ("                             \
@@ -152,7 +188,7 @@ class Database:
             return self.cursor.lastrowid
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to create analysis: %s" % e)
-
+    '''
     def add_exe(self, file_path, md5):
         """ Add an exe to db
         @param file_path: path to file
@@ -174,26 +210,28 @@ class Database:
             return conn.insert_id()
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to add executable: %s" % e)
-            
-    def fetch(self):
-        """Fetch a task.
-        @return: task dict or None.
-        """
-        try:
-            self.cursor.execute("SELECT * FROM tasks " \
-                                "WHERE `lock` = 0 "      \
-                                "AND `status` = 0 "      \
-                                "ORDER BY `priority` DESC, `added_on` LIMIT 1;")
-        except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to fetch: %s" % e)
+    '''
+    
+    def add_exe(self, file_path, md5):
+        exe = s.query(Exe).filter(md5=md5).first()
         
-        #row = dict_factory(self.cursor.fetchone())
-        #for column in self.cursor.fetchone():
-        #    row += dict_factory(self.cursor.fetchone(), column)
-        r = self.cursor.fetchone()
-        row = dict_factory(self.cursor, r)
-        return row
+        if exe:
+            return exe.id
+        try:
+            exe = Exe(file_path, md5)
+            s.add(exe)
+            return exe.id
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to add executable, reason: %s" % e)
 
+    def fetch(self):
+        try:
+            task = s.query(Task).filter(lock=0,status=0).order_by(desc(priority)).first()
+            return task
+            
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to fetch, reason: %s" % e)
+        
     def lock(self, task_id):
         """Lock a task.
         @param task_id: task id.
