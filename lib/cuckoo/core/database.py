@@ -21,6 +21,7 @@ engine = create_engine("mysql://avtest:avtest@172.20.20.196:3306/avtest")
 Session = sessionmaker(bind=engine)
 s = Session()
 Base = declarative_base()
+
 # Table Exe abstraction
 class Exe(Base):
 
@@ -33,8 +34,10 @@ class Exe(Base):
 	def __init__(self, file_path, md5):
 		self.file_path = file_path
 		self.md5 = md5
+		
 # Table Analysis abstraction
 class Analysis(Base):
+    
 	__tablename__ = "analysis"
 	
 	id = Column(Integer, primary_key=True)
@@ -48,6 +51,7 @@ class Analysis(Base):
 	def __init__(self, desc, exe_id):
 		self.desc = desc
 		self.exe_id = exe_id
+		
 # Table Tasks abstraction
 class Task(Base):
 	__tablename__ = "tasks"
@@ -227,7 +231,7 @@ class Database:
 
     def fetch(self):
         try:
-            task = s.query(Task).filter(lock=0,status=0).order_by(desc(priority)).first()
+            task = s.query(Task).filter(lock==0,status==0).order_by(desc(priority)).first()
             return task
             
         except SQLAlchemyError as e:
