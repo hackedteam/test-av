@@ -74,15 +74,15 @@ class Task(Base):
 	detected = Column(Integer)
 
 	def __init__(self,
+	             file_path,
 	             a_id,
 	             md5,
-	             file_path,
 	             timeout,
+	             package,
+	             options,
 	             priority,
 	             custom,
 	             machine,
-	             package,
-	             options,
 	             platform):
 		self.a_id = a_id
 		self.md5 = md5
