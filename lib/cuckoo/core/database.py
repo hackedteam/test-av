@@ -7,6 +7,7 @@ import sys
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import Column, Integer, Text, DateTime
@@ -224,7 +225,7 @@ class Database:
 
     def fetch(self):
         #try:
-            task = s.query(Task).filter_by(lock=0, status=0).order_by(Task.priority.desc).first()
+            task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(priority).first()
             return task
             
         #except SQLAlchemyError as e:
