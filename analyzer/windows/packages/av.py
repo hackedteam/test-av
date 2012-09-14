@@ -12,7 +12,7 @@ class Av(Package):
     """EXE analysis package."""
     def get_task_id(self):
         conf = Config("c:\\cuckoo\\analysis.conf")
-        return conf.analysis.task_id
+        return conf.task_id
 
     def start(self, path):
         # TODO: proper constructor for MySQL connection handler
