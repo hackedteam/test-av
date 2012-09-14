@@ -251,7 +251,8 @@ class Database:
         try:
             s = Session()
             task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(Task.priority)).first()
-            print("fetching task %s" % task)
+            #print("fetching task %s" % task)
+            s.close()
             return task
             
         except SQLAlchemyError as e:
