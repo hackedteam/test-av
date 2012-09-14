@@ -73,8 +73,7 @@ class Task(Base):
 	status = Column(Integer)
 	detected = Column(Integer)
 
-	def __init__(self, 
-	             id, 
+	def __init__(self,
 	             a_id,
 	             md5,
 	             file_path,
@@ -85,7 +84,6 @@ class Task(Base):
 	             package,
 	             options,
 	             platform):
-		self.id = id
 		self.a_id = a_id
 		self.md5 = md5
 		self.file_path = file_path
