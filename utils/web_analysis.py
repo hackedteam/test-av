@@ -54,16 +54,16 @@ def store_and_submit_fileobj(fobj, filename, desc, package="",
     # Submit task to cuckoo db
     db = Database()
     # Create executable record if needed
-    exe_id = db.add_exe(file_path=tmpf.name,
+    exe = db.add_exe(file_path=tmpf.name,
                         md5=md5h.hexdigest())
     #print("EXE ID: %s, 0: %s" % (str(exe_id), exe_id[0]))
     # Create analysis record
-    a_id = db.add_analysis(desc, exe_id)
+    analysis = db.add_analysis(desc, exe.id)
     #print("ANALYSIS ID: %s" % anal_id)
     
     for machine in machines.split(","):
         task_id = db.add(file_path=tmpf.name,
-                         a_id=a_id,
+                         a_id=analysis.id,
                          md5=md5h.hexdigest(),
                          package=package,
                          timeout=timeout,
