@@ -165,35 +165,41 @@ class Database:
             return None
             
         if not timeout:
-            timeout = 0
-
+            tiemout = 0
+            
         try:
-            print(file_path, a_id, md5, timeout, package, options, priority, custom, machine, platform)
-            self.cursor.execute(
-                """INSERT INTO tasks 
-                (`file_path`, `anal_id`, `md5`, `timeout`, `package`, `options`, `priority`, `custom`, `machine`, `platform`) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""", (file_path, a_id, md5, timeout, package, options, priority, custom, machine, platform))
-            self.conn.commit()
-            return self.cursor.lastrowid
+            task = Task(file_path,
+                        a_id,
+                        md5,
+                        timeout,
+                        package,
+                        options,
+                        priority,
+                        custom,
+                        machine,
+                        platform)
+            
+            s.add(task)
+            s.commit()
+            return task.id
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to add task: %s" % e)
-
+        
     def add_analysis(self, desc, exe_id):
         """ Add an analysis on database
         @param desc: description
         @param exe_id: id of executable to test
         @return: cursor or None
-        """             
-        if not exe_id:
-            return None
-        
+        """
+        a = Analysis(desc, exe_id)
+                    
         try:
-            self.cursor.execute("""INSERT INTO analysis (`desc`, `exe_id`) VALUES (%s, %s);""", (desc, exe_id))
-            self.conn.commit()
-            return self.cursor.lastrowid
-        except MySQLdb.Error as e:
+            s.add(a)
+            s.commit()
+            return a.id
+        except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to create analysis: %s" % e)
-    '''
+    
     def add_exe(self, file_path, md5):
         """ Add an exe to db
         @param file_path: path to file
@@ -215,23 +221,10 @@ class Database:
             return conn.insert_id()
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to add executable: %s" % e)
-    '''
-    
-    def add_exe(self, file_path, md5):
-        exe = s.query(Exe).filter(md5=md5).first()
-        
-        if exe:
-            return exe.id
-        try:
-            exe = Exe(file_path, md5)
-            s.add(exe)
-            return exe.id
-        except SQLAlchemyError as e:
-            raise CuckooDatabaseError("Unable to add executable, reason: %s" % e)
 
     def fetch(self):
         #try:
-            task = s.query(Task).filter_by(lock=0, status=0).order_by(priority.desc).first()
+            task = s.query(Task).filter_by(lock=0, status=0).order_by(Task.priority.desc).first()
             return task
             
         #except SQLAlchemyError as e:
@@ -243,20 +236,18 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE `id` = %s;" % task_id)
-            row = self.cursor.fetchone()
-        except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to create database: %s" % e)
-
-        if row:
+            task = s.query(Task).filter_by(id=task_id).first()
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to find lock, reason: %s" % e)
+            
+        if task:
             try:
-                self.cursor.execute("UPDATE tasks SET `lock` = 1 WHERE `id` = %s;" % task_id)
-                self.conn.commit()
-            except MySQLdb.Error as e:
-                raise CuckooDatabaseError("Unable to lock: %s" % e)
+                task.lock = 1
+                s.commit()
+            except SQLAlchemyError as e:
+                raise CuckooDatabaseError("Unable to update lock, reason: %s" % e)
         else:
             return False
-
         return True
 
     def unlock(self, task_id):
@@ -265,20 +256,18 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE `id` = %s;" % task_id)
-            row = self.cursor.fetchone()
-        except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to create database: %s" % e)
-
+            task = s.query(Task).filter_by(id=task_id).first()
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to find lock, reason: %s" % e)
+        
         if row:
             try:
-                self.cursor.execute("UPDATE tasks SET `lock` = 0 WHERE `id` = %s;" % task_id)
-                self.conn.commit()
-            except MySQLdb.Error as e:
-                raise CuckooDatabaseError("Unable to unlock: %s" % e)
+                task.lock = 0
+                s.commit()
+            except SQLAlchemyError as e:
+                raise CuckooDatabaseError("Unable to unlock, reason: %s" % e)
         else:
             return False
-
         return True
 
     def complete(self, task_id, success=True):
@@ -288,26 +277,20 @@ class Database:
         @return: operation status.
         """
         try:
-            self.cursor.execute("SELECT id FROM tasks WHERE `id` = %s;" % task_id)
-            row = self.cursor.fetchone()
-        except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to create database: %s" % e)
-
+            task = s.query(Task).filter_by(id=task_id).first()
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to find lock, reason: %s" % e)
+        
         if row:
             if success:
-                status = 2
+                task.status = 2
             else:
-                status = 1
-
+                task.status = 1
+                
             try:
-                self.cursor.execute("UPDATE tasks SET `lock` = 0, "     \
-                                    "`status` = %s, "                    \
-                                    "`completed_on` = DATETIME('now') " \
-                                    "WHERE `id` = %s;" % (status, task_id))
-                self.conn.commit()
-            except MySQLdb.Error as e:
-                raise CuckooDatabaseError("Unable to complete: %s" % e)
+                s.commit()
+            except SQLAlchemyError as e:
+                raise CuckooDatabaseError("Unable to complete, reason: %s" % e)
         else:
             return False
-
         return True
