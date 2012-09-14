@@ -36,12 +36,13 @@ class Av(Package):
         if x == True:
             cursor.execute("UPDATE tasks SET detected = %s WHERE id = %s",
                             (1, task_id))
+            cursor.commit()
         elif x == False:
             cursor.execute("UPDATE tasks SET detected = %s WHERE id = %s",
                             (2, task_id))
+            cursor.commit()
         else:
             return False
-        cursor.commit()
         return p.pid
 
     def check(self):
