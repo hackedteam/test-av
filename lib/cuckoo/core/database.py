@@ -194,6 +194,7 @@ class Database:
             timeout = 0
             
         try:
+            
             task = Task(file_path,
                         a_id,
                         md5,
@@ -207,7 +208,6 @@ class Database:
             
             s.add(task)
             s.commit()
-            s.close()
             return task.id
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to add task: %s" % e)
@@ -223,7 +223,6 @@ class Database:
         try:
             s.add(a)
             s.commit()
-            s.close()
             return a.id
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to create analysis: %s" % e)
@@ -244,7 +243,6 @@ class Database:
             exe = Exe(file_path, md5)
             s.add(exe)
             s.commit()
-            s.close()
             return exe.id
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to add executable, reason: %s" % e)
@@ -253,7 +251,6 @@ class Database:
         try:
             task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(Task.priority)).first()
             #log.debug("fetching task %s" %s)
-            s.close()
             return task
             
         except SQLAlchemyError as e:
@@ -273,7 +270,6 @@ class Database:
             try:
                 task.lock = 1
                 s.commit()
-                s.close()
             except SQLAlchemyError as e:
                 raise CuckooDatabaseError("Unable to update lock, reason: %s" % e)
         else:
@@ -294,7 +290,6 @@ class Database:
             try:
                 task.lock = 0
                 s.commit()
-                s.close()
             except SQLAlchemyError as e:
                 raise CuckooDatabaseError("Unable to unlock, reason: %s" % e)
         else:
@@ -320,7 +315,6 @@ class Database:
                 
             try:
                 s.commit()
-                s.close()
             except SQLAlchemyError as e:
                 raise CuckooDatabaseError("Unable to complete, reason: %s" % e)
         else:
