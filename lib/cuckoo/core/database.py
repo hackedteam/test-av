@@ -212,12 +212,12 @@ class Database:
         row = s.query(Exe).filter_by(md5=md5).first()
         
         if row is not None:
-            return row
+            return row.id
         try:
             exe = Exe(file_path, md5)
             s.add(exe)
             s.commit()
-            return exe
+            return exe.id
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to add executable, reason: %s" % e)
 
