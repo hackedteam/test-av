@@ -247,6 +247,7 @@ class Database:
     def fetch(self):
         try:
             task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(Task.priority)).first()
+            print task
             return task
             
         except SQLAlchemyError as e:

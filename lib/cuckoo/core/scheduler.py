@@ -266,13 +266,13 @@ class Scheduler:
             time.sleep(1)
 
             if mmanager.availables() == 0:
-                #log.debug("No machines available, try again")
+                log.debug("No machines available, try again")
                 continue
 
             task = self.db.fetch()
 
             if not task:
-                #log.debug("No pending tasks, try again")
+                log.debug("No pending tasks, try again")
                 continue
 
             analysis = AnalysisManager(task)
