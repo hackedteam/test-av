@@ -34,10 +34,10 @@ class Av(Package):
             x = p.execute(path=path, suspended=False)
         
         if x == True:
-            cursor.execute("UPDATE tasks SET detected = ? WHERE task_id = ?",
+            cursor.execute("UPDATE tasks SET detected = %d WHERE task_id = %s",
                             (1, task_id))
         elif x == False:
-            cursor.execute("UPDATE tasks SET detected = ? WHERE task_id = ?",
+            cursor.execute("UPDATE tasks SET detected = %d WHERE task_id = %s",
                             (2, task_id))
         else:
             return False
