@@ -250,7 +250,7 @@ class Database:
     def fetch(self):
         try:
             task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(Task.priority)).first()
-            #log.debug("fetching task %s" %s)
+            print("fetching task %s" %s)
             return task
             
         except SQLAlchemyError as e:
