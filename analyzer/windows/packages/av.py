@@ -41,7 +41,7 @@ class Av(Package):
                             (2, task_id))
         else:
             return False
-        
+        cursor.commit()
         return p.pid
 
     def check(self):
