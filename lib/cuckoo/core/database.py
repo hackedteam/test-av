@@ -189,7 +189,7 @@ class Database:
             return None
             
         if not timeout:
-            tiemout = 0
+            timeout = 0
             
         try:
             task = Task(file_path,
