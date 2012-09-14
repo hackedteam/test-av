@@ -4,11 +4,15 @@
 
 import MySQLdb
 
+from lib.core.config import Config
 from lib.common.abstracts import Package
 from lib.api.process import Process
 
 class Av(Package):
     """EXE analysis package."""
+    def get_task_id(self):
+        conf = Config("c:\\cuckoo\\analysis.conf")
+        return conf.analysis.task_id
 
     def start(self, path):
         # TODO: proper constructor for MySQL connection handler
@@ -20,10 +24,10 @@ class Av(Package):
         conn = MySQLdb.connect(host, user, passwd, dbname)
         cursor = conn.cursor()
         
+        task_id = self.get_task_id()
+        
         p  = Process()
-        
-        print self.options
-        
+                
         if "arguments" in self.options:
             x = p.execute(path=path, args=self.options["arguments"], suspended=False)
         else:
@@ -31,10 +35,10 @@ class Av(Package):
         
         if x == True:
             cursor.execute("UPDATE tasks SET detected = ? WHERE task_id = ?",
-                            (1, self.options["task_id"]))
+                            (1, task_id))
         elif x == False:
             cursor.execute("UPDATE tasks SET detected = ? WHERE task_id = ?",
-                            (2, self.options["task_id"]))
+                            (2, task_id))
         else:
             return False
         
