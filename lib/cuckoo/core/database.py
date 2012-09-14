@@ -230,12 +230,12 @@ class Database:
             raise CuckooDatabaseError("Unable to add executable, reason: %s" % e)
 
     def fetch(self):
-        try:
+        #try:
             task = s.query(Task).filter_by(lock=0, status=0).order_by(Task.priority.desc).first()
             return task
             
-        except SQLAlchemyError as e:
-            raise CuckooDatabaseError("Unable to fetch, reason: %s" % e)
+        #except SQLAlchemyError as e:
+        #    raise CuckooDatabaseError("Unable to fetch, reason: %s" % e)
         
     def lock(self, task_id):
         """Lock a task.
