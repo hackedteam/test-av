@@ -84,10 +84,7 @@ class Task(Base):
 	             machine,
 	             package,
 	             options,
-	             platform,
-	             lock,
-	             status,
-	             detected):
+	             platform):
 		self.id = id
 		self.a_id = a_id
 		self.md5 = md5
@@ -99,9 +96,6 @@ class Task(Base):
 		self.package = package
 		self.options = options
 		self.platform = platform
-		self.lock = lock
-		self.status = status
-		self.detected = detected
         
 
 class Database:
