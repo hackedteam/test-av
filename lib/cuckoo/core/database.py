@@ -112,51 +112,51 @@ class Database:
             """We need 3 tables: Analysis, tasks and another one 
             needed for executables
             """
-            cursor.execute("CREATE TABLE analysis ("                            \
-                           "    `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"    \
-                           "    `desc` TEXT NULL,"                            \
-                           "    `exe_id` INTEGER NOT NULL,"                           \
-                           "    `created_on` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "        \
-                           "    `completed_on` TIMESTAMP NULL, "                   \
-                           "    `lock` INTEGER DEFAULT 0, "                           \
+            cursor.execute("CREATE TABLE analysis ("                                \
+                           "    `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"  \
+                           "    `desc` TEXT NULL,"                                  \
+                           "    `exe_id` INTEGER NOT NULL,"                         \
+                           "    `created_on` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " \
+                           "    `completed_on` TIMESTAMP NULL, "                    \
+                           "    `lock` INTEGER DEFAULT 0, "                         \
                            # Status possible values:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                               "    `status` INTEGER DEFAULT 0"                           \
+                               "    `status` INTEGER DEFAULT 0"                     \
                            ");")
                            
-            cursor.execute("CREATE TABLE exe ("                             \
-                            "   `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"    \
-                            "   `file_path` TEXT NOT NULL, "                 \
-                            "   `md5` TEXT NULL "                   \
+            cursor.execute("CREATE TABLE exe ("                                     \
+                            "   `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"  \
+                            "   `file_path` TEXT NOT NULL, "                        \
+                            "   `md5` TEXT NULL "                                   \
                             ");")
             
-            cursor.execute("CREATE TABLE tasks ( "                         \
-                           "    `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, "                  \
-                           "    `anal_id` INTEGER NOT NULL, "                \
-                           "    `md5` TEXT NULL, "                   \
-                           "    `file_path` TEXT NOT NULL, "                 \
-                           "    `timeout` INTEGER DEFAULT NULL, "            \
-                           "    `priority` INTEGER DEFAULT 0, "              \
-                           "    `custom` TEXT NULL, "                \
-                           "    `machine` TEXT NULL, "               \
-                           "    `package` TEXT NULL, "               \
-                           "    `options` TEXT NULL, "               \
-                           "    `platform` TEXT NULL, "              \
-                           "    `added_on` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " \
-                           "    `completed_on` TIMESTAMP NULL, "          \
-                           "    `lock` INTEGER DEFAULT 0, "                  \
+            cursor.execute("CREATE TABLE tasks ( "                                  \
+                           "    `id` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " \
+                           "    `anal_id` INTEGER NOT NULL, "                       \
+                           "    `md5` TEXT NULL, "                                  \
+                           "    `file_path` TEXT NOT NULL, "                        \
+                           "    `timeout` INTEGER DEFAULT NULL, "                   \
+                           "    `priority` INTEGER DEFAULT 0, "                     \
+                           "    `custom` TEXT NULL, "                               \
+                           "    `machine` TEXT NULL, "                              \
+                           "    `package` TEXT NULL, "                              \
+                           "    `options` TEXT NULL, "                              \
+                           "    `platform` TEXT NULL, "                             \
+                           "    `added_on` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "   \
+                           "    `completed_on` TIMESTAMP NULL, "                    \
+                           "    `lock` INTEGER DEFAULT 0, "                         \
                            # Status possible values:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                           "    `status` INTEGER DEFAULT 0, "                 \
+                           "    `status` INTEGER DEFAULT 0, "                       \
                            # Detected possible values:
                            #   0 = not completed
                            #   1 = not detected (success)
                            #   2 = detected (fail!)
-                           "    `detected` INTEGER DEFAULT 0 "                \
+                           "    `detected` INTEGER DEFAULT 0 "                      \
                            ");")
 
         except MySQLdb.Error as e:
@@ -207,6 +207,7 @@ class Database:
             
             s.add(task)
             s.commit()
+            s.close()
             return task.id
         except MySQLdb.Error as e:
             raise CuckooDatabaseError("Unable to add task: %s" % e)
@@ -222,6 +223,7 @@ class Database:
         try:
             s.add(a)
             s.commit()
+            s.close()
             return a.id
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to create analysis: %s" % e)
@@ -242,6 +244,7 @@ class Database:
             exe = Exe(file_path, md5)
             s.add(exe)
             s.commit()
+            s.close()
             return exe.id
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to add executable, reason: %s" % e)
@@ -250,6 +253,7 @@ class Database:
         try:
             task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(Task.priority)).first()
             #log.debug("fetching task %s" %s)
+            s.close()
             return task
             
         except SQLAlchemyError as e:
@@ -269,6 +273,7 @@ class Database:
             try:
                 task.lock = 1
                 s.commit()
+                s.close()
             except SQLAlchemyError as e:
                 raise CuckooDatabaseError("Unable to update lock, reason: %s" % e)
         else:
@@ -289,6 +294,7 @@ class Database:
             try:
                 task.lock = 0
                 s.commit()
+                s.close()
             except SQLAlchemyError as e:
                 raise CuckooDatabaseError("Unable to unlock, reason: %s" % e)
         else:
@@ -314,6 +320,7 @@ class Database:
                 
             try:
                 s.commit()
+                s.close()
             except SQLAlchemyError as e:
                 raise CuckooDatabaseError("Unable to complete, reason: %s" % e)
         else:
