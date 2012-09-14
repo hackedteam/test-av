@@ -22,6 +22,8 @@ class Av(Package):
         
         p  = Process()
         
+        print self.options
+        
         if "arguments" in self.options:
             x = p.execute(path=path, args=self.options["arguments"], suspended=False)
         else:
