@@ -208,28 +208,26 @@ class Database:
         """
         if not file_path or not os.path.exists(file_path):
             return None
-            
-        # check if md5 is present on db
-        self.cursor.execute("""SELECT * FROM exe WHERE `md5` = %s;""", (md5,))
-        row = self.cursor.fetchone()
+        
+        row = s.query(Exe).filter_by(md5=md5).first()
+        
         if row is not None:
-            return row["id"]
+            return row
         try:
-            self.cursor.execute("""INSERT INTO exe (`file_path`, `md5`)
-                                VALUES (%s, %s);""", (file_path, md5))
-            self.conn.commit()
-            #return int(self.cursor.lastrowid)
-            return conn.insert_id()
-        except MySQLdb.Error as e:
-            raise CuckooDatabaseError("Unable to add executable: %s" % e)
+            exe = Exe(file_path, md5)
+            s.add(exe)
+            s.commit()
+            return exe
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to add executable, reason: %s" % e)
 
     def fetch(self):
-        #try:
-            task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(priority).first()
+        try:
+            task = s.query(Task).filter_by(lock=0, status=0).order_by(desc(priority)).first()
             return task
             
-        #except SQLAlchemyError as e:
-        #    raise CuckooDatabaseError("Unable to fetch, reason: %s" % e)
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to fetch, reason: %s" % e)
         
     def lock(self, task_id):
         """Lock a task.
