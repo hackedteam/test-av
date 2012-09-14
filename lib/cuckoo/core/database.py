@@ -74,20 +74,20 @@ class Task(Base):
 	detected = Column(Integer)
 
 	def __init__(self, desc, exe_id):
-        self.id = id
-        self.a_id = a_id
-        self.md5 = md5
-        self.file_path = file_path
-        self.timeout = timeout
-        self.priority = priority
-        self.custom = custom
-        self.machine = machine
-        self.package = package
-        self.options = options
-        self.platform = platform
-        self.lock = lock
-        self.status = status
-        self.detected = detected
+		self.id = id
+		self.a_id = a_id
+		self.md5 = md5
+		self.file_path = file_path
+		self.timeout = timeout
+		self.priority = priority
+		self.custom = custom
+		self.machine = machine
+		self.package = package
+		self.options = options
+		self.platform = platform
+		self.lock = lock
+		self.status = status
+		self.detected = detected
         
 
 class Database:
