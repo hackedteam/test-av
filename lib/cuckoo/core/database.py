@@ -18,7 +18,7 @@ from lib.cuckoo.common.abstracts import Dictionary
 from lib.cuckoo.common.utils import create_folder
 
 # SQL Alchemy init time
-engine = create_engine("mysql://avtest:avtest@172.20.20.196:3306/avtest")
+engine = create_engine("mysql://avtest:avtest@10.0.20.1:3306/avtest")
 Session = sessionmaker(bind=engine)
 s = Session()
 Base = declarative_base()
