@@ -334,6 +334,7 @@ class Database:
     
     def get_analysis(self, a_id):
         try:
+            s = Session()
             tasks = s.query(Task).filter_by(a_id=a_id).all()
             return tasks
         except SQLAlchemyError as e:
@@ -341,6 +342,7 @@ class Database:
             
     def get_task(self, task_id):
         try:
+            s = Session()
             task = s.query(Analysis).filter_by(task_id=task_id).first()
             return task
         except SQLAlchemyError as e:
