@@ -328,9 +328,8 @@ class Database:
         try:
             analysis = s.query(Analysis).order_by(desc(Analysis.status),desc(Analysis.created_on)).all()
             a = analysis
-            for b in analysis:
-                print b
-            a.file_path = analysis.exe.file_path
+            print a.file_path
+            #a.file_path = analysis.exe.file_path
             return a
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to get all analysis, reason:" % e)
