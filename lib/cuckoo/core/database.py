@@ -105,7 +105,7 @@ class Database:
         """Create database.
         @return: operation status.
         """
-        conn = MySQLdb.connect(""self.hostname"10.0.20.1", "avtest", "avtest", "avtest")
+        conn = MySQLdb.connect("10.0.20.1", "avtest", "avtest", "avtest")
         cursor = conn.cursor()
 
         try:
