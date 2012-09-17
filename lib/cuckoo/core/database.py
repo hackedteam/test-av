@@ -325,7 +325,7 @@ class Database:
 
     def get_all_analysis(self):
         try:
-            analysis = s.query(Analysis).order_by(desc(Analysis.status,Analysis.created_on)).all()
+            analysis = s.query(Analysis).order_by(desc(Analysis.status),desc(Analysis.created_on)).all()
             return analysis
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to get all analysis, reason:" % e)
