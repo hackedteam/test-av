@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import Column, Integer, Text, DateTime
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 
 from lib.cuckoo.common.constants import CUCKOO_ROOT
 from lib.cuckoo.common.exceptions import CuckooDatabaseError, CuckooOperationalError
@@ -44,7 +44,7 @@ class Analysis(Base):
 	
 	id = Column(Integer, primary_key=True)
 	desc = Column(Text)
-	exe_id = Column(Integer)
+	exe_id = Column(Integer, ForeignKey(exe.id))
 	created_on = Column(DateTime)
 	completed_on = Column(DateTime)
 	lock = Column(Integer)
@@ -59,7 +59,7 @@ class Task(Base):
 	__tablename__ = "tasks"
 	
 	id = Column(Integer, primary_key=True)
-	a_id = Column("anal_id", Integer)
+	a_id = Column("anal_id", Integer, ForeignKey(analysis.id))
 	md5 = Column(Text)
 	file_path = Column(Text)
 	timeout = Column(Integer)
@@ -326,7 +326,9 @@ class Database:
     def get_all_analysis(self):
         try:
             analysis = s.query(Analysis).order_by(desc(Analysis.status),desc(Analysis.created_on)).all()
-            return analysis
+            a = analysis
+            a.file_path = analysis.exe_id.file_path
+            return a
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to get all analysis, reason:" % e)
             
