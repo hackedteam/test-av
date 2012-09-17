@@ -19,7 +19,11 @@
                     </td>
                     <td>${r.machine}</td>
                     <td>
-                        % if r.status == 0:
+                    	% if r.detected == 1:
+                        	NOT DETECTED
+                    	% elif r.detected == 2:
+                        	DETECTED
+                        % elif r.status == 0:
                             % if r.lock == 0:
                                 PENDING
                             % elif r.lock == 1:
@@ -27,10 +31,6 @@
                             % endif
                         % elif r.status == 1:
                             FAILED
-                        % elif r.detected == 1:
-	                        NOT DETECTED
-                        % elif r.detected == 2:
-                            DETECTED
                         % endif
                     </td>
                 </tr>
