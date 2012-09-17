@@ -44,7 +44,7 @@ class Analysis(Base):
 	
 	id = Column(Integer, primary_key=True)
 	desc = Column(Text)
-	exe_id = Column(Integer, ForeignKey('exe.id'))
+	exe_id = Column('exe_id', Integer, ForeignKey('exe.id'))
 	exe = relationship("Exe")
 	created_on = Column(DateTime)
 	completed_on = Column(DateTime)
