@@ -328,6 +328,7 @@ class Database:
         try:
             analysis = s.query(Analysis).order_by(desc(Analysis.status),desc(Analysis.created_on)).all()
             a = analysis
+            print analysis
             a.file_path = analysis.exe.file_path
             return a
         except SQLAlchemyError as e:
