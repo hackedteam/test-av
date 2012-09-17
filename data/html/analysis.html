@@ -14,7 +14,7 @@
                         <a href="/analysis/view/${r.id}"><span class="mono">${r.desc}</span></a>
                     </td>
                     <td>${os.path.basename(r.exe.file_path)}</td>
-                    <td>${r.added_on}</td>
+                    <td>${r.created_on}</td>
                     <td>
                         % if r.status == 0:
                             % if r.lock == 0:
