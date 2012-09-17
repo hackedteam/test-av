@@ -334,7 +334,7 @@ class Database:
     
     def get_analysis(self, a_id):
         try:
-            tasks = s.query(Analysis).filter_by(anal_id=a_id).all()
+            tasks = s.query(Task).filter_by(anal_id=a_id).all()
             return tasks
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to get all tasks for analysis, reason: %s" % e)
