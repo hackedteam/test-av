@@ -44,7 +44,7 @@ class Analysis(Base):
 	
 	id = Column(Integer, primary_key=True)
 	desc = Column(Text)
-	exe_id = Column(Integer, ForeignKey(exe.id))
+	exe_id = Column(Integer, ForeignKey('exe.id'))
 	created_on = Column(DateTime)
 	completed_on = Column(DateTime)
 	lock = Column(Integer)
@@ -59,7 +59,7 @@ class Task(Base):
 	__tablename__ = "tasks"
 	
 	id = Column(Integer, primary_key=True)
-	a_id = Column("anal_id", Integer, ForeignKey(analysis.id))
+	a_id = Column("anal_id", Integer, ForeignKey('analysis.id'))
 	md5 = Column(Text)
 	file_path = Column(Text)
 	timeout = Column(Integer)
