@@ -7,7 +7,7 @@ import sys
 import MySQLdb
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import SQLAlchemyError
@@ -45,6 +45,7 @@ class Analysis(Base):
 	id = Column(Integer, primary_key=True)
 	desc = Column(Text)
 	exe_id = Column(Integer, ForeignKey('exe.id'))
+	exe = relationship("Exe")
 	created_on = Column(DateTime)
 	completed_on = Column(DateTime)
 	lock = Column(Integer)
@@ -327,7 +328,7 @@ class Database:
         try:
             analysis = s.query(Analysis).order_by(desc(Analysis.status),desc(Analysis.created_on)).all()
             a = analysis
-            a.file_path = analysis.exe_id.file_path
+            a.file_path = analysis.exe.file_path
             return a
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to get all analysis, reason:" % e)
