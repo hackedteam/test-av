@@ -327,10 +327,7 @@ class Database:
     def get_all_analysis(self):
         try:
             analysis = s.query(Analysis).order_by(desc(Analysis.status),desc(Analysis.created_on)).all()
-            a = analysis
-            print a.file_path
-            #a.file_path = analysis.exe.file_path
-            return a
+            return analysis
         except SQLAlchemyError as e:
             raise CuckooDatabaseError("Unable to get all analysis, reason:" % e)
             
