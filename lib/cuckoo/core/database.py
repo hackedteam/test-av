@@ -105,7 +105,7 @@ class Database:
         """Create database.
         @return: operation status.
         """
-        conn = MySQLdb.connect(self.hostname, self.username, self.password, self.dbname)
+        conn = MySQLdb.connect(""self.hostname"10.0.20.1", "avtest", "avtest", "avtest")
         cursor = conn.cursor()
 
         try:
@@ -123,7 +123,7 @@ class Database:
                            #   0 = not completed
                            #   1 = error occurred
                            #   2 = completed successfully.
-                               "    `status` INTEGER DEFAULT 0"                     \
+                           "    `status` INTEGER DEFAULT 0"                         \
                            ");")
                            
             cursor.execute("CREATE TABLE exe ("                                     \
@@ -322,3 +322,26 @@ class Database:
         else:
             return False
         return True
+
+    def get_all_analysis(self):
+        try:
+            analysis = s.query(Analysis).order_by(desc(status,created_on)).all()
+            return analysis
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to get all analysis, reason:" % e)
+            
+    
+    def get_analysis(self, a_id):
+        try:
+            tasks = s.query(Analysis).filter_by(anal_id=a_id).all()
+            return tasks
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to get all tasks for analysis, reason: %s" % e)
+            
+    def get_task(self, task_id):
+        try:
+            task = s.query(Analysis).filter_by(task_id=task_id).first()
+            return task
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to get all tasks for analysis, reason: %s" % e)
+        

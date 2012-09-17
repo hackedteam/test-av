@@ -105,38 +105,16 @@ def browse():
 def analysis():
     db = Database()
     context = {}
-
-    try:
-        db.cursor.execute("SELECT * FROM analysis " \
-                          "ORDER BY status, created_on DESC;")
-    except MySQLdb.Error as e:
-        context["error"] = "Could not load tasks from database."
-        return template.render(**context)
-
-    rows = db.cursor.fetchall()
-    for row in rows:
-        db.cursor.execute("SELECT * FROM exe " \
-                          "WHERE id = ?;", (row.exe_id,))
-        exe = db.cursor.fetchone()
-        row.update({"file_path":exe.file_path})
-        
+    rows = db.get_all_analysis()
     template = lookup.get_template("analysis.html")
     context["cuckoo_root"] = CUCKOO_ROOT
     return template.render(os=os, rows=rows, **context)
 
-@route("/analysis/view/<anal_id>")
-def analysis_view(anal_id):    
+@route("/analysis/view/<a_id>")
+def analysis_view(a_id):    
     db = Database()
     context = {}
-    
-    try:
-        db.cursor.execute("SELECT * FROM tasks " \
-                          "WHERE anal_id = ?;", (anal_id,))
-    except MySQLdb.Error as e:
-        context["error"] = "Could not load analysis from database"
-        return template.render(**context)
-    
-    rows = db.cursor.fetchall()
+    rows = db.get_analysis(a_id) 
     template = lookup.get_template("browse.html")
     context["cuckoo_root"] = CUCKOO_ROOT
     return template.render(os=os, rows=rows, **context)
