@@ -175,7 +175,7 @@ class AnalysisManager(Thread):
             guest.save_results(self.analysis.results_folder)
         except (CuckooMachineError, CuckooGuestError) as e:
             raise CuckooAnalysisError(e)
-        """
+        #"""
         finally:
             # Stop machine
             mmanager.stop(vm.label)
