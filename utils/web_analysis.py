@@ -165,8 +165,8 @@ def submit():
     	# only for vmware.conf
     	# TODO: make it universal 
     	conf = ConfigParser.ConfigParser()
-    	conf.read(os.path.join(CUCKOO_ROOT,"config","vmware.conf"))
-    	print os.path.join(CUCKOO_ROOT,"config","vmware.conf")
+    	conf.read(os.path.join(CUCKOO_ROOT,"conf","vmware.conf"))
+    	#print os.path.join(CUCKOO_ROOT, "conf", "vmware.conf")
     	machines = conf.get("vmware", "machines")
         #print conf,machines
     # Finally real store and submit
