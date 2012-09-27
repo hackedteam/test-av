@@ -9,6 +9,7 @@ import logging
 import tempfile
 import hashlib
 import MySQLdb
+import ConfigParser
 from time import sleep
 from mako.template import Template
 from mako.lookup import TemplateLookup
@@ -158,6 +159,14 @@ def submit():
         template = lookup.get_template("submit.html")
         return template.render(timeout=timeout, priority=priority, options=options, package=package, **context)
     
+    
+    if machines == "all":
+    	# only for vmware.conf
+    	# TODO: make it universal 
+    	conf = ConfigParser.ConfigParser()
+    	conf.read(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
+        machines = conf.get("vmware","machines")
+            
     # Finally real store and submit
     analid = store_and_submit_fileobj(data.file, data.filename, desc=desc, 
                                     timeout=timeout, priority=priority, options=options, 

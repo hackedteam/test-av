@@ -105,7 +105,15 @@ class Database:
     def generate(self):
         """Create database.
         @return: operation status.
+        NOTE: you need to create database and user before generate db tables
         """
+        try:
+	        Base.metadata.create_all(engine)
+	    except SQLAlchemyError as e:
+	    	raise CuckooDatabaseError("Unable to create database tables: " % e)
+	    return True
+	'''
+	def generate(self):
         conn = MySQLdb.connect("10.0.20.1", "avtest", "avtest", "avtest")
         cursor = conn.cursor()
 
@@ -164,7 +172,7 @@ class Database:
             raise CuckooDatabaseError("Unable to create database: %s" % e)
 
         return True
-    
+    '''
     def add(self,
             file_path,
             a_id,
@@ -325,6 +333,9 @@ class Database:
         return True
 
     def get_all_analysis(self):
+    	""" Get all analysis
+    	@return ALL analysis
+    	"""
         try:
             analysis = s.query(Analysis).order_by(desc(Analysis.status),desc(Analysis.created_on)).all()
             return analysis
@@ -333,6 +344,10 @@ class Database:
             
     
     def get_analysis(self, a_id):
+    	""" Retrive all tasks for given analysis id
+    	@param: a_id: analysis id
+    	@returns: all tasks for that analysis
+    	"""
         try:
             s = Session()
             tasks = s.query(Task).filter_by(a_id=a_id).all()
