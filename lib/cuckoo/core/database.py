@@ -109,9 +109,9 @@ class Database:
         """
         try:
 	        Base.metadata.create_all(engine)
-	    except SQLAlchemyError as e:
-	    	raise CuckooDatabaseError("Unable to create database tables: " % e)
-	    return True
+        except SQLAlchemyError as e:
+            raise CuckooDatabaseError("Unable to create database: %s" % e)
+        return True
 	'''
 	def generate(self):
         conn = MySQLdb.connect("10.0.20.1", "avtest", "avtest", "avtest")
