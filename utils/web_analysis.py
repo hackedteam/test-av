@@ -167,9 +167,8 @@ def submit():
     	conf = ConfigParser.ConfigParser()
     	conf.read(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
     	#conf = Config(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
-    	machines = conf.get("machines")
-        vmware = conf.get("vmware")
-        print machines,vmware
+    	machines = conf.get("vmware", "machines")
+        print conf,machines
     # Finally real store and submit
     analid = store_and_submit_fileobj(data.file, data.filename, desc=desc, 
                                     timeout=timeout, priority=priority, options=options, 
