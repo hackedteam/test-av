@@ -165,10 +165,10 @@ def submit():
     	# only for vmware.conf
     	# TODO: make it universal 
     	#conf = ConfigParser.ConfigParser()
-    	#conf.read(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
-    	conf = Config(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
-    	machines = conf.get("machines")
-        #machines = conf.get("vmware","machines")
+    	conf.read(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
+    	#conf = Config(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
+    	#machines = conf.get("machines")
+        machines = conf.getattr("vmware","machines")
             
     # Finally real store and submit
     analid = store_and_submit_fileobj(data.file, data.filename, desc=desc, 
