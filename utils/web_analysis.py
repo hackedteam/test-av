@@ -167,13 +167,13 @@ def submit():
     	#conf = ConfigParser.ConfigParser()
     	#conf.read(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
     	conf = Config(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
-    	vmware = conf.get("vmware")
+    	machines = conf.get("machines")
         #machines = conf.get("vmware","machines")
             
     # Finally real store and submit
     analid = store_and_submit_fileobj(data.file, data.filename, desc=desc, 
                                     timeout=timeout, priority=priority, options=options, 
-                                    machines=vmware.machines, package=package)
+                                    machines=machines, package=package)
     # Show result
     template = lookup.get_template("success.html")
     return template.render(analid=analid, submitfile=data.filename)
