@@ -19,6 +19,7 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), "../"))
 
 from lib.cuckoo.core.database import Database
 from lib.cuckoo.common.constants import CUCKOO_ROOT
+from lib.cuckoo.common.config import Config
 from lib.bottle import route, run, static_file, redirect, request, HTTPError
 
 # This directory will be created in $tmppath (see store_and_submit)
@@ -163,14 +164,16 @@ def submit():
     if machines == "all":
     	# only for vmware.conf
     	# TODO: make it universal 
-    	conf = ConfigParser.ConfigParser()
-    	conf.read(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
-        machines = conf.get("vmware","machines")
+    	#conf = ConfigParser.ConfigParser()
+    	#conf.read(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
+    	conf = Conf(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
+    	vmware = conf.get("vmware")
+        #machines = conf.get("vmware","machines")
             
     # Finally real store and submit
     analid = store_and_submit_fileobj(data.file, data.filename, desc=desc, 
                                     timeout=timeout, priority=priority, options=options, 
-                                    machines=machines, package=package)
+                                    machines=vmware.machines, package=package)
     # Show result
     template = lookup.get_template("success.html")
     return template.render(analid=analid, submitfile=data.filename)
