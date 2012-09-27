@@ -134,9 +134,9 @@ def submit():
 
     # Optional, can be empty
     desc     = request.forms.get("desc", "")
-    package  = request.forms.get("package", "")
+    package  = request.forms.get("package", "av")
     options  = request.forms.get("options", "")
-    machines = request.forms.get("machines", "")
+    machines = request.forms.get("machines", "all")
     priority = request.forms.get("priority", 1)
     timeout  = request.forms.get("timeout", "")
     data = request.files.file
