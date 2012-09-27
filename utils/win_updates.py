@@ -1,4 +1,4 @@
-nimport subprocess
+import subprocess
 import ConfigParser
 import sys
 from time import sleep
@@ -80,7 +80,9 @@ if __name__ == "__main__":
 	conf = Config(config_file)
 	vms = conf.getMachines()
 	exe = conf.getVmrunPath()
-	
+	""" Stage 1:
+	For each VM startup and launch update script
+	"""
 	for vm in vms:
 		#if vm == "gdata" or vm == "kav" or vm == "avira" or vm == "avg":
 		#	continue
@@ -90,12 +92,14 @@ if __name__ == "__main__":
 		cmd.revertSnapshot("current")
 		sleep(3)
 		cmd.startup()
-		sleep(10)
+		sleep(30)
 		cmd.executeCmd(cscriptPath,scriptPath)
-		sleep(20)
+	""" Stage 2:
+	Refresh all VMs' snapshots and shut them down (remember reboot to apply all updates!!)
+	for vm in vms:
 		cmd.refreshSnapshot("current")
 		sleep(3)
 		cmd.shutdown()
 		sleep(1)
-
+	"""
 
