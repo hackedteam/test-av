@@ -166,7 +166,7 @@ def submit():
     	# TODO: make it universal 
     	#conf = ConfigParser.ConfigParser()
     	#conf.read(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
-    	conf = Conf(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
+    	conf = Config(CUCKOO_ROOT+os.sep+"config"+os.sep+"vmware.conf")
     	vmware = conf.get("vmware")
         #machines = conf.get("vmware","machines")
             
