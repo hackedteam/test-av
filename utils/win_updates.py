@@ -1,4 +1,5 @@
 import subprocess
+import argparse
 import ConfigParser
 import sys
 from time import sleep
@@ -44,6 +45,20 @@ class Command:
 						"-u", "avtest", "-p", "Av!Auto123",
 						"stop", self.vmx])
 		sys.stdout.write("\r\nShutdown %s!\r\n" % vmx)
+
+	def reboot(self):
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"reset", self.vmx, "soft"])
+		sys.stdout.write("\r\nRebooting %s!\r\n" % vmx)
+
+	def suspend(self):
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"suspend", self.vmx, "soft"])
+		sys.stdout.write("\r\nSuspending %s!\r\n" % vmx)
 		
 	def executeCmd(self, cmd, script):
 		sys.stdout.write("Executing %s %s.\n" % (cmd, script))
@@ -71,35 +86,62 @@ class Command:
 						"-h", "https://vcenter5.hackingteam.local/sdk",
 						"-u", "avtest", "-p", "Av!Auto123",
 						"revertToSnapshot", self.vmx, snapshot])
-		
+
+			
 
 if __name__ == "__main__":
 	config_file = "c:/test-av/conf/vmware.conf"
 	cscriptPath="c:/windows/system32/cscript.exe"
 	scriptPath="c:/script/WUA_SearchDownloadInstall.vbs"
-	conf = Config(config_file)
-	vms = conf.getMachines()
-	exe = conf.getVmrunPath()
+	#conf = Config(config_file)
+	#vms = conf.getMachines()
+	#exe = conf.getVmrunPath()
+	
+	parser = argparse.ArgumentParser(description='VMs updater script')
+	parser.add_argument('op', metavar='operation', type=str,
+						help='operation to perform (start,reboot,refresh)')
+	args = parser.parse_args()
+	
+	if args.op == "start":
 	""" Stage 1:
 	For each VM startup and launch update script
 	"""
-	for vm in vms:
-		#if vm == "gdata" or vm == "kav" or vm == "avira" or vm == "avg":
-		#	continue
-		sys.stdout.write("Updating %s\n" % vm)	
-		vmx = conf.getVmx(vm)
-		cmd = Command(vmx, exe)
-		cmd.revertSnapshot("current")
-		sleep(3)
-		cmd.startup()
-		sleep(30)
-		cmd.executeCmd(cscriptPath,scriptPath)
+		sys.stdout.write('[*] Startin Virtual machines')
+		for vm in vms:
+			#if vm == "gdata" or vm == "kav" or vm == "avira" or vm == "avg":
+			#	continue
+			sys.stdout.write("[˜] Updating %s\n" % vm)	
+			vmx = conf.getVmx(vm)
+			cmd = Command(vmx, exe)
+			cmd.revertSnapshot("current")
+			sleep(3)
+			cmd.startup()
+			sleep(30)
+			cmd.executeCmd(cscriptPath,scriptPath)
+		
+	elif args.op == "reboot":
 	""" Stage 2:
-	Refresh all VMs' snapshots and shut them down (remember reboot to apply all updates!!)
-	for vm in vms:
-		cmd.refreshSnapshot("current")
-		sleep(3)
-		cmd.shutdown()
-		sleep(1)
+	Reboot for updates
 	"""
-
+		sys.stdout.write('[*] Performing reboot')
+		for vm in vms:
+			cmd.reboot(vm)
+			sleep(5)
+				
+	elif args.op == "refresh":
+	""" Stage 3:
+	Refresh all VMs' snapshots and shut them down (remember reboot to apply all updates!!)
+	"""
+		sys.stdout.write('[*] Refreshing vms snapshots')
+		for vm in vms:
+			cmd.refreshSnapshot("current")
+			sleep(60)
+			cmd.shutdown()
+			sleep(1)
+	
+	else:
+		print '[*] no action will be performed'
+		
+	
+	
+	
