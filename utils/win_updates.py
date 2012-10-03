@@ -93,9 +93,9 @@ if __name__ == "__main__":
 	config_file = "c:/test-av/conf/vmware.conf"
 	cscriptPath="c:/windows/system32/cscript.exe"
 	scriptPath="c:/script/WUA_SearchDownloadInstall.vbs"
-	#conf = Config(config_file)
-	#vms = conf.getMachines()
-	#exe = conf.getVmrunPath()
+	conf = Config(config_file)
+	vms = conf.getMachines()
+	exe = conf.getVmrunPath()
 	
 	parser = argparse.ArgumentParser(description='VMs updater script')
 	parser.add_argument('op', metavar='operation', type=str,
