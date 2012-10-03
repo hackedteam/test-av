@@ -102,7 +102,7 @@ if __name__ == "__main__":
 	#netScript="c:/windows/system32/netsh.exe"
 	netENScript="c:/Users/avtest/Desktop/EnableIF.bat"
 	netDISScript="c:/Users/avtest/Desktop/DisableIF.bat"
-	scriptPath="c:/script/WUA_SearchDownloadInstall.vbs"
+	scriptPath="z:/WUA_SearchDownloadInstall.vbs"
 	conf = Config(config_file)
 	vms = conf.getMachines()
 	exe = conf.getVmrunPath()
@@ -137,7 +137,10 @@ if __name__ == "__main__":
 		"""
 		sys.stdout.write('[*] Performing reboot')
 		for vm in vms:
-			cmd.reboot(vm)
+			vmx = conf.getVmx(vm)
+			cmd = Command(vmx, exe)
+			cmd.shutdown()
+			cmd.startup()
 			sleep(5)
 				
 	elif args.op == "refresh":
@@ -146,6 +149,8 @@ if __name__ == "__main__":
 		"""
 		sys.stdout.write('[*] Refreshing vms snapshots')
 		for vm in vms:
+			vmx = conf.getVmx(vm)
+			cmd = Command(vmx, exe)
 			cmd.executeCmd(netDISScript,None)
 			cmd.refreshSnapshot("current")
 			sleep(60)
