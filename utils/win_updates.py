@@ -110,7 +110,7 @@ if __name__ == "__main__":
 		for vm in vms:
 			#if vm == "gdata" or vm == "kav" or vm == "avira" or vm == "avg":
 			#	continue
-			sys.stdout.write("[˜] Updating %s\n" % vm)	
+			sys.stdout.write("[*] Updating %s\n" % vm)	
 			vmx = conf.getVmx(vm)
 			cmd = Command(vmx, exe)
 			cmd.revertSnapshot("current")
