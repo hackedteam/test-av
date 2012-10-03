@@ -92,9 +92,9 @@ class Command:
 if __name__ == "__main__":
 	config_file = "c:/test-av/conf/vmware.conf"
 	cscriptPath="c:/windows/system32/cscript.exe"
-	netScript="c:/windows/system32/netsh.exe"
-	netENArgs="interface set interface 'Local Area Connection' ENABLED"
-	netDISArgs="interface set interface 'Local Area Connection' DISABLED"
+	#netScript="c:/windows/system32/netsh.exe"
+	netENScript="c:/Users/avtest/Desktop/EnableExternalIF.lnk"
+	netDISScript="c:/Users/avtest/Desktop/DisableExternalIF.lnk"
 	scriptPath="c:/script/WUA_SearchDownloadInstall.vbs"
 	conf = Config(config_file)
 	vms = conf.getMachines()
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 			sleep(10)
 			cmd.startup()
 			sleep(40)
-			cmd.executeCmd(netScript,netENArgs)
+			cmd.executeCmd(netENScript,None)
 			sleep(10)
 			cmd.executeCmd(cscriptPath,scriptPath)
 			sys.stdout.write("[*] Updated\n\n")
