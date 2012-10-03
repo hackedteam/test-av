@@ -103,9 +103,9 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	
 	if args.op == "start":
-	""" Stage 1:
-	For each VM startup and launch update script
-	"""
+		""" Stage 1:
+		For each VM startup and launch update script
+		"""
 		sys.stdout.write('[*] Startin Virtual machines')
 		for vm in vms:
 			#if vm == "gdata" or vm == "kav" or vm == "avira" or vm == "avg":
@@ -120,18 +120,18 @@ if __name__ == "__main__":
 			cmd.executeCmd(cscriptPath,scriptPath)
 		
 	elif args.op == "reboot":
-	""" Stage 2:
-	Reboot for updates
-	"""
+		""" Stage 2:
+		Reboot for updates
+		"""
 		sys.stdout.write('[*] Performing reboot')
 		for vm in vms:
 			cmd.reboot(vm)
 			sleep(5)
 				
 	elif args.op == "refresh":
-	""" Stage 3:
-	Refresh all VMs' snapshots and shut them down (remember reboot to apply all updates!!)
-	"""
+		""" Stage 3:
+		Refresh all VMs' snapshots and shut them down (remember reboot to apply all updates!!)
+		"""
 		sys.stdout.write('[*] Refreshing vms snapshots')
 		for vm in vms:
 			cmd.refreshSnapshot("current")
