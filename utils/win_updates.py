@@ -153,7 +153,7 @@ if __name__ == "__main__":
 			vmx = conf.getVmx(vm)
 			cmd = Command(vmx, exe)
 			cmd.executeCmd(netDISScript,None)
-			cmd.refreshSnapshot("current")
+			#cmd.refreshSnapshot("current")
 			sleep(60)
 			cmd.shutdown()
 			sleep(1)
