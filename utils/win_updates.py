@@ -100,8 +100,8 @@ if __name__ == "__main__":
 	config_file = "c:/test-av/conf/vmware.conf"
 	cscriptPath="c:/windows/system32/cscript.exe"
 	#netScript="c:/windows/system32/netsh.exe"
-	netENScript="z:/EnableIF.bat"
-	netDISScript="z:/DisableIF.bat"
+	netENScript="c:/Users/avtest/Desktop/EnableIF.bat"
+	netDISScript="c:/Users/avtest/Desktop/DisableIF.bat"
 	scriptPath="c:/script/WUA_SearchDownloadInstall.vbs"
 	conf = Config(config_file)
 	vms = conf.getMachines()
