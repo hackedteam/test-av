@@ -60,13 +60,20 @@ class Command:
 						"suspend", self.vmx, "soft"])
 		sys.stdout.write("\r\nSuspending %s!\r\n" % vmx)
 		
-	def executeCmd(self, cmd, script):
+	def executeCmd(self, cmd, script=None):
 		sys.stdout.write("Executing %s %s.\n" % (cmd, script))
-		subprocess.Popen([self.path,
+		if script not None:
+			subprocess.Popen([self.path,
 						"-h", "https://vcenter5.hackingteam.local/sdk",
 						"-u", "avtest", "-p", "Av!Auto123",
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", self.vmx, cmd, script])
+						"runProgramInGuest", self.vmx, cmd, script])			
+		else:
+			subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"-gu", "avtest", "-gp", "avtest",
+						"runProgramInGuest", self.vmx, cmd])
 						
 	def refreshSnapshot(self, snapshot):
 		sys.stdout.write("Deleting current snapshot.\n")
