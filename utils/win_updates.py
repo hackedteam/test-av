@@ -117,12 +117,13 @@ if __name__ == "__main__":
 			vmx = conf.getVmx(vm)
 			cmd = Command(vmx, exe)
 			cmd.revertSnapshot("current")
-			sleep(3)
+			sleep(10)
 			cmd.startup()
-			sleep(30)
+			sleep(40)
 			cmd.executeCmd(netScript,netENArgs)
+			sleep(10)
 			cmd.executeCmd(cscriptPath,scriptPath)
-		
+			sys.stdout.write("[*] Updated\n\n")
 	elif args.op == "reboot":
 		""" Stage 2:
 		Reboot for updates
