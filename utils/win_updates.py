@@ -92,6 +92,9 @@ class Command:
 if __name__ == "__main__":
 	config_file = "c:/test-av/conf/vmware.conf"
 	cscriptPath="c:/windows/system32/cscript.exe"
+	netScript="c:/windows/system32/netsh.exe"
+	netENArgs="interface set interface 'Local Area Connection' ENABLED"
+	netDISArgs="interface set interface 'Local Area Connection' DISABLED"
 	scriptPath="c:/script/WUA_SearchDownloadInstall.vbs"
 	conf = Config(config_file)
 	vms = conf.getMachines()
@@ -117,6 +120,7 @@ if __name__ == "__main__":
 			sleep(3)
 			cmd.startup()
 			sleep(30)
+			cmd.executeCmd(netScript,netENArgs)
 			cmd.executeCmd(cscriptPath,scriptPath)
 		
 	elif args.op == "reboot":
@@ -134,6 +138,7 @@ if __name__ == "__main__":
 		"""
 		sys.stdout.write('[*] Refreshing vms snapshots')
 		for vm in vms:
+			cmd.executeCmd(netScript,netDISArgs)
 			cmd.refreshSnapshot("current")
 			sleep(60)
 			cmd.shutdown()
