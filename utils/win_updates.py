@@ -139,8 +139,9 @@ if __name__ == "__main__":
 		for vm in vms:
 			vmx = conf.getVmx(vm)
 			cmd = Command(vmx, exe)
-			cmd.shutdown()
-			cmd.startup()
+			#cmd.shutdown()
+			#cmd.startup()
+			cmd.reboot()
 			sleep(5)
 				
 	elif args.op == "refresh":
