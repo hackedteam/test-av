@@ -86,7 +86,7 @@ class Command:
 						#"runProgramInGuest", self.vmx, "cmd.exe", "/C", scriptPath, scriptPath, ">","c:/Users/avtest/Documents/update.log"])			
 						#"runProgramInGuest", self.vmx, "cmd.exe", "/C", "dir", "C:", ">", "C:\\dir.txt"])
 						#"runProgramInGuest", self.vmx, "c:/windows/system32/cmd.exe", "/c", "copy", "c:/windows/explorer.exe", "c:/Users/avtest/"]) #, "/c", "dir", "c:/", ">", "C:/dir.txt"])
-						"runProgramInGuest", self.vmx, "-interactive","c:/windows/system32/cscript.exe","c:/Users/avtest/WUA_SearchDownloadInstall.vbs"])
+						"runProgramInGuest", self.vmx, "-noWait","c:/windows/system32/cscript.exe","c:/Users/avtest/WUA_SearchDownloadInstall.vbs"])
 						
 	def refreshSnapshot(self, snapshot):
 		sys.stdout.write("Deleting current snapshot.\n")
