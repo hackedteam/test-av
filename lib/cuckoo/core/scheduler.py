@@ -192,7 +192,7 @@ class AnalysisManager(Thread):
         success = True
 
         db = Database()
-        db.lock(self.task.id)
+        #db.lock(self.task.id)
 
         try:
             self.launch_analysis()

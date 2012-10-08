@@ -154,7 +154,7 @@ if __name__ == "__main__":
 			cmd = Command(vmx, exe)
 			cmd.executeCmd(netDISScript,None)
 			#cmd.refreshSnapshot("current")
-			sleep(60)
+			sleep(30)
 			cmd.shutdown()
 			sleep(1)
 	
