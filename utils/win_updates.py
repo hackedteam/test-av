@@ -79,14 +79,14 @@ class Command:
 	def update(self):
 		cscriptPath="c:/windows/system32/cscript.exe"
 		scriptPath="z:/WUA_SearchDownloadInstall.vbs"	
-		subprocess.Popen([self.path,
+		subprocess.call([self.path,
 						"-h", "https://vcenter5.hackingteam.local/sdk",
 						"-u", "avtest", "-p", "Av!Auto123",
 						"-gu", "avtest", "-gp", "avtest",
 						#"runProgramInGuest", self.vmx, "cmd.exe", "/C", scriptPath, scriptPath, ">","c:/Users/avtest/Documents/update.log"])			
 						#"runProgramInGuest", self.vmx, "cmd.exe", "/C", "dir", "C:", ">", "C:\\dir.txt"])
 						#"runProgramInGuest", self.vmx, "c:/windows/system32/cmd.exe", "/c", "copy", "c:/windows/explorer.exe", "c:/Users/avtest/"]) #, "/c", "dir", "c:/", ">", "C:/dir.txt"])
-						"runProgramInGuest", self.vmx, "-noWait","c:/windows/system32/cscript.exe","c:/Users/avtest/WUA_SearchDownloadInstall.vbs"])
+						"runProgramInGuest", self.vmx, "-activeWindow","c:/windows/system32/cscript.exe","c:/Users/avtest/WUA_SearchDownloadInstall.vbs"])
 						
 	def refreshSnapshot(self, snapshot):
 		sys.stdout.write("Deleting current snapshot.\n")
@@ -129,7 +129,7 @@ if __name__ == "__main__":
 		""" Stage 1:
 		For each VM startup and launch update script
 		"""
-		sys.stdout.write('[*] Startin Virtual machines')
+		sys.stdout.write('[*] Startin Virtual machines\n\n')
 		for vm in vms:
 			#if vm == "gdata" or vm == "kav" or vm == "avira" or vm == "avg":
 			#	continue
@@ -140,11 +140,11 @@ if __name__ == "__main__":
 			sleep(10)
 			cmd.startup()
 			sleep(40)
-			#cmd.executeCmd(netENScript,None)
-			cmd.update()
+			cmd.executeCmd(netENScript,None)
 			sleep(10)
 			#cmd.executeCmd(cscriptPath,scriptPath)
-			sys.stdout.write("[*] Updated\n\n")
+			cmd.update()
+			#sys.stdout.write("[*] Updated\n\n")
 	elif args.op == "reboot":
 		""" Stage 2:
 		Reboot for updates
