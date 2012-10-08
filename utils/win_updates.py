@@ -84,7 +84,7 @@ class Command:
 						"-u", "avtest", "-p", "Av!Auto123",
 						"-gu", "avtest", "-gp", "avtest",
 						#"runProgramInGuest", self.vmx, "cmd.exe", "/C", scriptPath, scriptPath, ">","c:/Users/avtest/Documents/update.log"])			
-						"runProgramInGuest", self.vmx, "dir", "C:", ">", "C:/dir.txt"])
+						"runProgramInGuest", self.vmx, "cmd.exe", "/C", "dir", "C:", ">", "C:\\dir.txt"])
 	
 						
 	def refreshSnapshot(self, snapshot):
@@ -142,7 +142,7 @@ if __name__ == "__main__":
 			#cmd.executeCmd(netENScript,None)
 			cmd.update()
 			sleep(10)
-			cmd.executeCmd(cscriptPath,scriptPath)
+			#cmd.executeCmd(cscriptPath,scriptPath)
 			sys.stdout.write("[*] Updated\n\n")
 	elif args.op == "reboot":
 		""" Stage 2:
