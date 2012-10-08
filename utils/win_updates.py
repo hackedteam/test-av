@@ -74,6 +74,18 @@ class Command:
 						"-u", "avtest", "-p", "Av!Auto123",
 						"-gu", "avtest", "-gp", "avtest",
 						"runProgramInGuest", self.vmx, cmd,">","c:/Users/avtest/Documents/update.log"])
+	
+	
+	def update(self):
+		cscriptPath="c:/windows/system32/cscript.exe"
+		scriptPath="z:/WUA_SearchDownloadInstall.vbs"	
+		subprocess.Popen([self.path,
+						"-h", "https://vcenter5.hackingteam.local/sdk",
+						"-u", "avtest", "-p", "Av!Auto123",
+						"-gu", "avtest", "-gp", "avtest",
+						"runProgramInGuest", self.vmx, cscriptPath, scriptPath, ">","c:/Users/avtest/Documents/update.log"])			
+	
+	
 						
 	def refreshSnapshot(self, snapshot):
 		sys.stdout.write("Deleting current snapshot.\n")
@@ -127,7 +139,8 @@ if __name__ == "__main__":
 			sleep(10)
 			cmd.startup()
 			sleep(40)
-			cmd.executeCmd(netENScript,None)
+			#cmd.executeCmd(netENScript,None)
+			cmd.update()
 			sleep(10)
 			cmd.executeCmd(cscriptPath,scriptPath)
 			sys.stdout.write("[*] Updated\n\n")
