@@ -83,8 +83,8 @@ class Command:
 						"-h", "https://vcenter5.hackingteam.local/sdk",
 						"-u", "avtest", "-p", "Av!Auto123",
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", self.vmx, cscriptPath, scriptPath, ">","c:/Users/avtest/Documents/update.log"])			
-	
+						#"runProgramInGuest", self.vmx, "cmd.exe", "/C", scriptPath, scriptPath, ">","c:/Users/avtest/Documents/update.log"])			
+						"runProgramInGuest", "dir", "C:", ">", "C:/dir.txt"])
 	
 						
 	def refreshSnapshot(self, snapshot):
