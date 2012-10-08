@@ -67,13 +67,13 @@ class Command:
 						"-h", "https://vcenter5.hackingteam.local/sdk",
 						"-u", "avtest", "-p", "Av!Auto123",
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", self.vmx, cmd, script])			
+						"runProgramInGuest", self.vmx, cmd, script, ">","c:/Users/avtest/Documents/update.log"])			
 		else:
 			subprocess.Popen([self.path,
 						"-h", "https://vcenter5.hackingteam.local/sdk",
 						"-u", "avtest", "-p", "Av!Auto123",
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", self.vmx, cmd])
+						"runProgramInGuest", self.vmx, cmd,">","c:/Users/avtest/Documents/update.log"])
 						
 	def refreshSnapshot(self, snapshot):
 		sys.stdout.write("Deleting current snapshot.\n")
