@@ -78,7 +78,7 @@ class WinUpdate:
 				sleep(10)
 		else:
 			sys.stdout.write("[*] Refresh snapshot of %s" % vmx)
-			self.cmd.refreshSnapshot(self.conf.getVmx(vmx))
+			self.cmd.refreshSnapshot(self.conf.getVmx(vmx), 'current')
 	
 '''
 MAIN
