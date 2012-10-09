@@ -138,3 +138,4 @@ MAIN
 '''	
 wu = WinUpdate()
 wu.doUpdate('norman')
+wu.doreboot('norman')
