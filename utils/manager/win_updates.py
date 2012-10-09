@@ -72,7 +72,7 @@ class WinUpdate:
 		if vmx == "all":
 			sys.stdout.write("[*] Refresh snapshots on guests.\n")
 			for vm in vms:
-				cmd.refreshSnapshot(self.conf.getVmx(vm)
+				cmd.refreshSnapshot(self.conf.getVmx(vm))
 				sleep(10)
 		else:
 			sys.stdout.write("[*] Refresh snapshot of %s" % vmx)
