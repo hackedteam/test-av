@@ -26,26 +26,26 @@ class WinUpdate:
 			
 			sys.stdout.write("[*] Starting all guests.\n")
 			for vm in vms:
-				cmd.startup(self.conf.getVmx(vm))
+				self.cmd.startup(self.conf.getVmx(vm))
 				sleep(5)
 				
 			sys.stdout.write("[*] Enabling Networking on guests.\n")
 			for vm in vms:
-				cmd.executeCmd(self.conf.getVmx(vm), self.netENScript)
+				self.cmd.executeCmd(self.conf.getVmx(vm), self.netENScript)
 
 			sys.stdout.write("[*] Updating operatings system on guests.\n")
 			for vm in vms:
-				cmd.executeCmd(self.conf.getVmx(vm), self.cscriptPath, self.netDISScript)
+				self.cmd.executeCmd(self.conf.getVmx(vm), self.cscriptPath, self.netDISScript)
 		
 		else:
 			sys.stdout.write("[*] Starting %s.\n" % vmx)
-			cmd.startup(self.conf.getVmx(vmx))
+			self.cmd.startup(self.conf.getVmx(vmx))
 			sleep(60)
 			sys.stdout.write("[*] Enabling Networking on %s.\n" % vmx)
-			cmd.executeCmd(self.conf.getVmx(vmx), self.netENScript)
+			self.cmd.executeCmd(self.conf.getVmx(vmx), self.netENScript)
 			slee(10)
 			sys.stdout.write("[*] Updating operatings system on %s.\n" % vmx)
-			cmd.executeCmd(self.conf.getVmx(vmx), self.cscriptPath, self.scriptPath)
+			self.cmd.executeCmd(self.conf.getVmx(vmx), self.cscriptPath, self.scriptPath)
 			
 	
 	def doReboot(self, vmx):
@@ -53,30 +53,30 @@ class WinUpdate:
 			vms = self.conf.getMachines()
 			sys.stdout.write("[*] Disabling network on guests.\n")
 			for vm in vms:
-				cmd.executeCmd(self.conf.getVmx(vm), self.netDISScript)
+				self.cmd.executeCmd(self.conf.getVmx(vm), self.netDISScript)
 				sleep(5)
 			sys.stdout.write("[*] Rebooting guests.\n")
 			for vm in vms:
-				cmd.reboot(self.conf.getVmx(vm))
+				self.cmd.reboot(self.conf.getVmx(vm))
 				sleep(5)	
 		else:
 			vm = self.conf.getVmx(vmx)
 			sys.stdout.write("[*] Disabling network on %s.\n" % vmx)
-			cmd.executeCmd(vm, self.netDISScript)
+			self.cmd.executeCmd(vm, self.netDISScript)
 			sleep(20)
 			sys.stdout.write("[*] Rebooting %s.\n" % vmx)
-			cmd.reboot(vm)
+			self.cmd.reboot(vm)
 
 
 	def refreshShot(self, vmx):
 		if vmx == "all":
 			sys.stdout.write("[*] Refresh snapshots on guests.\n")
 			for vm in vms:
-				cmd.refreshSnapshot(self.conf.getVmx(vm))
+				self.cmd.refreshSnapshot(self.conf.getVmx(vm))
 				sleep(10)
 		else:
 			sys.stdout.write("[*] Refresh snapshot of %s" % vmx)
-			cmd.refreshSnapshot(self.conf.getVmx(vmx))
+			self.cmd.refreshSnapshot(self.conf.getVmx(vmx))
 	
 '''
 MAIN
