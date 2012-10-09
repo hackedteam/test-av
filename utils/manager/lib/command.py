@@ -28,55 +28,55 @@ class Command:
 		subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
-						"reset", self.vmx, "soft"])
+						"reset", vmx, "soft"])
 
-	def suspend(self):
+	def suspend(self, vmx):
 		sys.stdout.write("\r\nSuspending %s!\r\n" % vmx)
 		subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
-						"suspend", self.vmx, "soft"])
+						"suspend", vmx, "soft"])
 		
-	def executeCmd(self, cmd, script=None):
+	def executeCmd(self, vmx, cmd, script=None):
 		sys.stdout.write("Executing %s %s.\n" % (cmd, script))
 		if script is not None:
 			subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", self.vmx, cmd, script, ">","c:/Users/avtest/Documents/update.log"])			
+						"runProgramInGuest", vmx, cmd, script, ">","c:/Users/avtest/Documents/update.log"])			
 		else:
 			subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", self.vmx, cmd,">","c:/Users/avtest/Documents/update.log"])
+						"runProgramInGuest", vmx, cmd,">","c:/Users/avtest/Documents/update.log"])
 	
 	
-	def update(self):
+	def update(self, vmx):
 		cscriptPath="c:/windows/system32/cscript.exe"
 		scriptPath="z:/WUA_SearchDownloadInstall.vbs"	
 		subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", self.vmx, "c:/windows/system32/cscript.exe","c:/Users/avtest/WUA_SearchDownloadInstall.vbs"])
+						"runProgramInGuest", vmx, "c:/windows/system32/cscript.exe","c:/Users/avtest/WUA_SearchDownloadInstall.vbs"])
 						
-	def refreshSnapshot(self, snapshot):
+	def refreshSnapshot(self, vmx, snapshot):
 		sys.stdout.write("Deleting current snapshot.\n")
 		subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
-						"deleteSnapshot", self.vmx, snapshot])
+						"deleteSnapshot", vmx, snapshot])
 		sys.stdout.write("Creating new current snapshot.\n")
 		subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
-						"snapshot", self.vmx, snapshot])
+						"snapshot", vmx, snapshot])
 						
-	def revertSnapshot(self, snapshot):
+	def revertSnapshot(self, vmx, snapshot):
 		sys.stdout.write("Reverting to current snapshot.\n")
 		subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
-						"revertToSnapshot", self.vmx, snapshot])
+						"revertToSnapshot", vmx, snapshot])
