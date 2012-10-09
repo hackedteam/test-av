@@ -16,7 +16,7 @@ class WinUpdate:
 		self.cscriptPath="c:/windows/system32/cscript.exe"
 		self.netENScript="c:/Users/avtest/Desktop/EnableIF.bat"
 		self.netDISScript="c:/Users/avtest/Desktop/DisableIF.bat"
-		self.scriptPath="z:/WUA_SearchDownloadInstall.vbs"
+		self.scriptPath="c:/Users/avtest/Desktop/WUA_SearchDownloadInstall.vbs"
 		
 
 	def doUpdate(self, vmx):
