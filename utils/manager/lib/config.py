@@ -9,7 +9,7 @@ class Config:
 		self.user = self.getParam('vmware','user')
 		self.passwd = self.getParam('vmware','passwd')
 		
-	def getParam(self, section='vmware', param):
+	def getParam(self, section, param):
 		self.conf.read(self.file)
 		param = self.conf.get(section,param)
 		return param
