@@ -74,7 +74,7 @@ class WinUpdate:
 		if vmx == "all":
 			sys.stdout.write("[*] Refresh snapshots on guests.\n")
 			for vm in vms:
-				self.cmd.refreshSnapshot(self.conf.getVmx(vm))
+				self.cmd.refreshSnapshot(self.conf.getVmx(vm), 'current')
 				sleep(10)
 		else:
 			sys.stdout.write("[*] Refresh snapshot of %s" % vmx)
@@ -140,8 +140,8 @@ MAIN
 '''	
 sys.stdout.write("Lets start!\n\n")
 wu = WinUpdate()
-wu.doUpdate('norman')
-wu.doReboot('norman')
+#wu.doUpdate('norman')
+#wu.doReboot('norman')
 wu.refreshShot('norman')
 
 sys.stdout.write("Everything is done!\n\n")
