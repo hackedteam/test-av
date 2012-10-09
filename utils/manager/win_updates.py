@@ -138,6 +138,10 @@ MAIN
 		
 
 '''	
+sys.stdout.write("Lets start!\n\n")
 wu = WinUpdate()
 wu.doUpdate('norman')
 wu.doReboot('norman')
+wu.refreshShot('norman')
+
+sys.stdout.write("Everything is done!\n\n")
