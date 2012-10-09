@@ -36,7 +36,8 @@ class WinUpdate:
 			sys.stdout.write("[*] Updating operatings system on guests.\n")
 			for vm in vms:
 				self.cmd.executeCmd(self.conf.getVmx(vm), self.cscriptPath, self.netDISScript)
-		
+			sys.stdout.write("[*] Done.\n")
+					
 		else:
 			sys.stdout.write("[*] Starting %s.\n" % vmx)
 			self.cmd.startup(self.conf.getVmx(vmx))
@@ -46,6 +47,7 @@ class WinUpdate:
 			sleep(10)
 			sys.stdout.write("[*] Updating operatings system on %s.\n" % vmx)
 			self.cmd.executeCmd(self.conf.getVmx(vmx), self.cscriptPath, self.scriptPath)
+			sys.stdout.write("[*] Done.\n")
 			
 	
 	def doReboot(self, vmx):
@@ -138,4 +140,4 @@ MAIN
 '''	
 wu = WinUpdate()
 wu.doUpdate('norman')
-wu.doreboot('norman')
+wu.doReboot('norman')
