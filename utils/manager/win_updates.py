@@ -8,11 +8,11 @@ from lib.command import Command
 class WinUpdate:
 	def __init__(self):
 		# init stuff
+		self.config_file = "c:/test-av/conf/vmware.conf"
 		self.conf = Config(self.config_file)
 		self.cmd = Command(self.conf.path, self.conf.host, self.conf.user, self.conf.passwd)
 		
 		# full paths of script neede for update
-		self.config_file = "c:/test-av/conf/vmware.conf"
 		self.cscriptPath="c:/windows/system32/cscript.exe"
 		self.netENScript="c:/Users/avtest/Desktop/EnableIF.bat"
 		self.netDISScript="c:/Users/avtest/Desktop/DisableIF.bat"
