@@ -43,7 +43,7 @@ class WinUpdate:
 			sleep(60)
 			sys.stdout.write("[*] Enabling Networking on %s.\n" % vmx)
 			self.cmd.executeCmd(self.conf.getVmx(vmx), self.netENScript)
-			slee(10)
+			sleep(10)
 			sys.stdout.write("[*] Updating operatings system on %s.\n" % vmx)
 			self.cmd.executeCmd(self.conf.getVmx(vmx), self.cscriptPath, self.scriptPath)
 			
