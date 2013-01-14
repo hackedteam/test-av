@@ -3,11 +3,14 @@ import sys
 import os
 
 class Command:
-	def __init__(self, path, host, user, passwd):
-		self.path = path
-		self.host = host
-		self.user = user
-		self.passwd = passwd
+	def __init__(self, path, host=None, user=None, passwd=None):
+		if not host and not user and not passwd:
+			self.path = path
+		else:
+			self.path = path
+			self.host = host
+			self.user = user
+			self.passwd = passwd
 	
 	def startup(self, vmx):
 		sys.stdout.write("\r\nStartup %s!\r\n" % vmx)
@@ -44,13 +47,13 @@ class Command:
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", vmx, cmd, script, ">","c:/Users/avtest/Documents/update.log"])			
+						"runProgramInGuest", vmx, cmd, script])			
 		else:
 			subprocess.call([self.path,
 						"-h", self.host,
 						"-u", self.user, "-p", self.passwd,
 						"-gu", "avtest", "-gp", "avtest",
-						"runProgramInGuest", vmx, cmd,">","c:/Users/avtest/Documents/update.log"])
+						"runProgramInGuest", vmx, cmd])
 	
 	
 	def update(self, vmx):
