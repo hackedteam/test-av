@@ -41,9 +41,7 @@ class AVUpdate:
 			sys.stdout.write("[*] Updating Antiviruses on guests.\n")
 			for vm in vms:
 				self.cmd.executeCmd(self.conf.getVmx(vm), self.updScript)
-			sys.stdout.write("[*] Disabling network on guests.\n")
-			for vm in vms:
-				self.cmd.executeCmd(self.conf.getVmx(vm), self.netDISScript)
+			sleep(60*len(vms))
 			sys.stdout.write("[*] Done.\n")
 					
 		else:
@@ -55,8 +53,7 @@ class AVUpdate:
 			sleep(10)
 			sys.stdout.write("[*] Updating Antivirus on %s.\n" % vmx)
 			self.cmd.executeCmd(self.conf.getVmx(vmx), self.updScript)
-			sys.stdout.write("[*] Disabling network on guests.\n")
-			self.cmd.executeCmd(self.conf.getVmx(vmx), self.netDISScript)
+			sleep(60*5)
 			sys.stdout.write("[*] Done.\n")
 			
 	
@@ -66,7 +63,7 @@ class AVUpdate:
 			sys.stdout.write("[*] Disabling network on guests.\n")
 			for vm in vms:
 				self.cmd.executeCmd(self.conf.getVmx(vm), self.netDISScript)
-				sleep(5)
+				sleep(15)
 			sys.stdout.write("[*] Rebooting guests.\n")
 			for vm in vms:
 				self.cmd.reboot(self.conf.getVmx(vm))
@@ -75,7 +72,6 @@ class AVUpdate:
 			vm = self.conf.getVmx(vmx)
 			sys.stdout.write("[*] Disabling network on %s.\n" % vmx)
 			self.cmd.executeCmd(vm, self.netDISScript)
-			sleep(60*5)
 			sys.stdout.write("[*] Rebooting %s.\n" % vmx)
 			self.cmd.reboot(vm)
 
