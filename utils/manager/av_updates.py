@@ -97,12 +97,12 @@ wu.doUpdate('norman')
 wu.doReboot('norman')
 wu.refreshShot('norman')
 '''
-if len(argv) < 1:
-	return
+if len(sys.argv) < 1:
+	sys.exit(0)
 
 sys.stdout.write("Lets start!\n\n")
 wu = WinUpdate()
-wu.doUpdate(argv[1])
-wu.doReboot(argv[1])
-wu.refreshShot(argv[1])
+wu.doUpdate(sys.argv[1])
+wu.doReboot(sys.argv[1])
+wu.refreshShot(sys.argv[1])
 sys.stdout.write("Everything is done!\n\n")
