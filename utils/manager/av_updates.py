@@ -101,7 +101,7 @@ if len(sys.argv) < 1:
 	sys.exit(0)
 
 sys.stdout.write("Lets start!\n\n")
-wu = WinUpdate()
+wu = AVUpdate()
 wu.doUpdate(sys.argv[1])
 wu.doReboot(sys.argv[1])
 wu.refreshShot(sys.argv[1])
