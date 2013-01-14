@@ -75,7 +75,7 @@ class AVUpdate:
 			vm = self.conf.getVmx(vmx)
 			sys.stdout.write("[*] Disabling network on %s.\n" % vmx)
 			self.cmd.executeCmd(vm, self.netDISScript)
-			sleep(20)
+			sleep(60*5)
 			sys.stdout.write("[*] Rebooting %s.\n" % vmx)
 			self.cmd.reboot(vm)
 
