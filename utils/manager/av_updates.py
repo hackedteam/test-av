@@ -90,11 +90,19 @@ class AVUpdate:
 			sys.stdout.write("[*] Refresh snapshot of %s" % vmx)
 			self.cmd.refreshSnapshot(self.conf.getVmx(vmx), 'current')
 
-
+'''
 sys.stdout.write("Lets start!\n\n")
 wu = WinUpdate()
 wu.doUpdate('norman')
 wu.doReboot('norman')
 wu.refreshShot('norman')
+'''
+if len(argv) < 1:
+	return
 
+sys.stdout.write("Lets start!\n\n")
+wu = WinUpdate()
+wu.doUpdate(argv[1])
+wu.doReboot(argv[1])
+wu.refreshShot(argv[1])
 sys.stdout.write("Everything is done!\n\n")
